@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Básico para Pesquisa Local -->
+  <title>Costa In Beach Bar | Ementa & Reservas</title>
+  <meta name="description" content="Desfrute dos melhores petiscos, bebidas e refeições à beira-mar na Costa da Caparica. Faça a sua reserva online.">
+  <meta name="keywords" content="beach bar caparica, restaurante praia caparica, ementa costa in, reservas praia">
+  <meta name="theme-color" content="#0077b6">
+
+  <!-- SEO Avançado: Dados Estruturados Schema.org para o Google -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BarOrPub",
+    "name": "Costa In Beach Bar",
+    "image": "https://oddmenu.com/images/default.jpg",
+    "telephone": "+351912345678",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Costa da Caparica",
+      "addressRegion": "Setúbal",
+      "addressCountry": "PT"
+    },
+    "servesCuisine": ["Petiscos", "Bebidas", "Peixe Fresco"],
+    "priceRange": "€€"
+  }
+  </script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== CABEÇALHO ===== -->
+  <header class="header">
+    <div class="header-logo">🌊</div>
+    <h1>Costa <span>In</span> Beach Bar</h1>
+    <p class="header-sub">Costa da Caparica · Beira-Mar</p>
+    <div class="header-badges">
+      <span class="badge badge-open">✅ Aberto Agora</span>
+      <span class="badge">📍 Costa da Caparica</span>
+      <span class="badge">☀️ Vista Mar</span>
+    </div>
+
+    <!-- Onda decorativa no fundo do header -->
+    <div class="wave-container">
+      <svg viewBox="0 0 1200 44" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,22 C150,44 350,0 600,22 C850,44 1050,0 1200,22 L1200,44 L0,44 Z" fill="#f0f8ff"/>
+      </svg>
+    </div>
+  </header>
+
+  <!-- ===== FILTRO DE CATEGORIAS ===== -->
+  <nav class="categories" id="categoryTabs">
+    <button class="tab active" onclick="filtrarMenu('todos')">🍽️ Todos</button>
+    <button class="tab" onclick="filtrarMenu('Petiscos')">🦑 Petiscos</button>
+    <button class="tab" onclick="filtrarMenu('Bebidas')">🍺 Bebidas</button>
+    <button class="tab" onclick="filtrarMenu('Pratos')">🐙 Pratos</button>
+  </nav>
+
+  <!-- ===== LISTA DE ITENS DO MENU ===== -->
+  <main class="menu-container" id="menuList">
+    <!-- Itens inseridos dinamicamente pelo JavaScript -->
+  </main>
+
+  <!-- Footer discreto -->
+  <footer class="footer">🌊 Costa In Beach Bar · Feito com ♥ na Caparica</footer>
+
+  <!-- ===== AÇÕES RÁPIDAS ===== -->
+  <div class="action-bar">
+    <button class="btn btn-call" onclick="abrirModalChamar()">🛎️ Chamar para Retirar</button>
+    <button class="btn btn-review" onclick="abrirModalAvaliacao()">⭐ Avaliação</button>
+  </div>
+
+  <!-- ===== MODAL: Chamar para Retirar ===== -->
+  <div id="modalChamar" class="modal">
+    <div class="modal-content">
+      <h3>🛎️ Chamar Funcionário</h3>
+      <p>Indica a tua mesa ou nome para sabermos quem retirar o pedido:</p>
+      <input type="text" id="identificacaoCliente" placeholder="Ex: Mesa 4 ou João">
+      <button class="btn btn-call" onclick="enviarChamadaWhatsApp()">📲 Enviar no WhatsApp</button>
+      <button class="btn btn-close" onclick="fecharModais()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: Agradecimento + Google Review ===== -->
+  <div id="modalAvaliacao" class="modal">
+    <div class="modal-content">
+      <h3>⭐ Agradecimento & Avaliação</h3>
+      <p>Insere o telemóvel do cliente para enviar um agradecimento com o link de avaliação do Google:</p>
+      <input type="tel" id="telefoneCliente" placeholder="Ex: 351912345678">
+      <button class="btn btn-review" onclick="enviarLinkAvaliacao()">💬 Enviar via WhatsApp</button>
+      <button class="btn btn-close" onclick="fecharModais()">Fechar</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
