@@ -1,165 +1,485 @@
 // ============================================================
-// Costa In Beach Bar — app.js
+// Costa In Beach Bar & Club — app.js (Cliente)
 // ============================================================
 
-// 1. Dados do Bar / Balcão
-const NUMERO_BAR = "351912345678"; // Substitui pelo número de WhatsApp do estabelecimento
-const LINK_GOOGLE_REVIEW = "https://g.page/r/SEU_LINK_AQUI/review"; // Link de avaliação do Google
+const WHATSAPP_BAR_NUMERO = "351912345678"; // Telemóvel / WhatsApp oficial do Costa In
+const UBER_EATS_URL = "https://www.ubereats.com/pt-en/store/costa-in-beach-club/j9DAntXeTrCOyTynN_Exfg?srsltid=AYCX9vIeUFoIWbxunwOSEhuOVMgpFiL8JHHTA4WefKUHWAuq8098JEnL";
 
-// 2. Base de dados da ementa
-//    Cada item pode ter: id, nome, categoria, preco, desc, emoji
-const pratos = [
+// Canal de Comunicação em Tempo Real com o Painel Admin (Mesma máquina/navegador)
+const syncChannel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('costa_in_sync') : null;
+
+// ============================================================
+// 1. BASE DE DADOS DO MENU (Alinhada com o Oddmenu Original)
+// ============================================================
+const itensMenu = [
   {
     id: 1,
-    nome: "Tosta Mista em Pão Alentejano",
+    nome: "Chocos Fritos à Setubalense",
     categoria: "Petiscos",
-    preco: "5.50€",
-    desc: "Queijo, fiambre e manteiga de ervas.",
-    emoji: "🥪"
+    preco: "12.50€",
+    desc: "Choco fresco tenro, frito com polme crocante, acompanhado de maionese de alho e limão da praia.",
+    imagem: "https://dyj6gt4964deb.cloudfront.net/images/7bf22938-6efb-432b-8ce4-8428edd068f8.jpeg",
+    tag: "Especialidade"
   },
   {
     id: 2,
-    nome: "Chocos Fritos à Setubalense",
+    nome: "Gambas ao Alho & Coentros",
     categoria: "Petiscos",
-    preco: "11.00€",
-    desc: "Acompanha maionese de alho.",
-    emoji: "🦑"
+    preco: "13.90€",
+    desc: "Gambas salteadas em azeite virgem extra, alho laminado, malagueta e coentros frescos.",
+    imagem: "https://dyj6gt4964deb.cloudfront.net/images/ebe04665-e7f2-4e4e-8679-c4f14237f811.jpeg",
+    tag: "Favorito"
   },
   {
     id: 3,
-    nome: "Cerveja Imperial 20cl",
-    categoria: "Bebidas",
-    preco: "1.80€",
-    desc: "Bem fresquinha.",
-    emoji: "🍺"
+    nome: "Pica-Pau de Novilho",
+    categoria: "Petiscos",
+    preco: "11.50€",
+    desc: "Tiras suculentas de novilho em molho apurado de cerveja, mostarda e picles caseiros.",
+    imagem: "https://dyj6gt4964deb.cloudfront.net/images/7bf22938-6efb-432b-8ce4-8428edd068f8.jpeg",
+    tag: "Praia"
   },
   {
     id: 4,
-    nome: "Caipirinha Tradicional",
-    categoria: "Bebidas",
-    preco: "6.50€",
-    desc: "Cachaça, lima e açúcar amarelo.",
-    emoji: "🍹"
+    nome: "Polvo à Lagareiro Costa In",
+    categoria: "Pratos",
+    preco: "17.50€",
+    desc: "Polvo tenro assado no forno com batatas a murro, muito azeite, alho e grelos salteados.",
+    imagem: "https://dyj6gt4964deb.cloudfront.net/images/7f4e0499-f35c-4fec-a4e7-69a370eb5e8b.jpeg",
+    tag: "Chef's Choice"
   },
   {
     id: 5,
-    nome: "Salada de Polvo da Costa",
+    nome: "Bife de Vazia Grelhado",
     categoria: "Pratos",
+    preco: "16.00€",
+    desc: "Corte nobre com manteiga de ervas da praia, servido com batata frita rústica e salada mista.",
+    imagem: "https://dyj6gt4964deb.cloudfront.net/images/7f4e0499-f35c-4fec-a4e7-69a370eb5e8b.jpeg",
+    tag: "Grelhado"
+  },
+  {
+    id: 6,
+    nome: "Pizza Costa In Especial",
+    categoria: "Pizzas",
+    preco: "13.50€",
+    desc: "Molho de tomate fresco, mozzarella fior di latte, presunto ibérico, rúcula e lascas de parmesão.",
+    imagem: "https://dyj6gt4964deb.cloudfront.net/images/77c7336b-3959-4d14-812f-0f8b8b951a5c.jpeg",
+    tag: "Artesanal"
+  },
+  {
+    id: 7,
+    nome: "Pizza Diavola Picante",
+    categoria: "Pizzas",
+    preco: "12.00€",
+    desc: "Mozzarella, salame picante italiano, orégãos e azeite de piripiri da Caparica.",
+    imagem: "https://dyj6gt4964deb.cloudfront.net/images/77c7336b-3959-4d14-812f-0f8b8b951a5c.jpeg",
+    tag: "Picante"
+  },
+  {
+    id: 8,
+    nome: "Burger Gourmet Costa In",
+    categoria: "Burgers",
     preco: "12.50€",
-    desc: "Polvo fresco, cebola, pimentos e azeite virgem.",
-    emoji: "🐙"
+    desc: "Carne bovina 180g, queijo cheddar maturado, bacon crocante, cebola caramelizada e maionese trufada.",
+    imagem: "https://dyj6gt4964deb.cloudfront.net/images/crop-a8266a99-cc0c-4fb9-a9aa-31f64d62c3c0.jpeg",
+    tag: "Best Seller"
+  },
+  {
+    id: 9,
+    nome: "Tosta Mista em Pão Alentejano",
+    categoria: "Burgers",
+    preco: "6.00€",
+    desc: "Pão alentejano tostado na brasa, fatias generosas de queijo flamengo e fiambre de peru fumado.",
+    imagem: "https://dyj6gt4964deb.cloudfront.net/images/crop-44b48e91-3b0f-49a0-b4fa-8d4e4f7dafa4.jpeg",
+    tag: "Clássico"
+  },
+  {
+    id: 10,
+    nome: "Salada de Polvo da Costa",
+    categoria: "Saladas",
+    preco: "13.00€",
+    desc: "Polvo cozido no ponto, pimentos coloridos, cebola roxa, salsa fresca e azeite virgem com vinagre suave.",
+    imagem: "https://dyj6gt4964deb.cloudfront.net/images/3f013666-cb45-4543-bb2e-90e1a7738307.jpeg",
+    tag: "Fresco"
+  },
+  {
+    id: 11,
+    nome: "Tagliatelle com Gambas ao Alho",
+    categoria: "Pastas",
+    preco: "14.50€",
+    desc: "Massa fresca salteada com camarões, tomate cereja confitado, manjericão e vinho branco da região.",
+    imagem: "https://dyj6gt4964deb.cloudfront.net/images/4764230c-1660-4584-9dee-2276d61021ac.jpeg",
+    tag: "Pasta Fresca"
+  },
+  {
+    id: 12,
+    nome: "Caipirinha Tradicional de Lima",
+    categoria: "Bebidas",
+    preco: "7.00€",
+    desc: "Cachaça brasileira premium, limas frescas maceradas com açúcar amarelo e gelo picado.",
+    imagem: "https://dyj6gt4964deb.cloudfront.net/images/ebe04665-e7f2-4e4e-8679-c4f14237f811.jpeg",
+    tag: "Sunset Drink"
+  },
+  {
+    id: 13,
+    nome: "Mojito Cubano com Hortelã",
+    categoria: "Bebidas",
+    preco: "7.50€",
+    desc: "Rum branco, hortelã fresca da horta, lima espremida, água gaseificada e açúcar mascavado.",
+    imagem: "https://dyj6gt4964deb.cloudfront.net/images/ebe04665-e7f2-4e4e-8679-c4f14237f811.jpeg",
+    tag: "Refrescante"
+  },
+  {
+    id: 14,
+    nome: "Cerveja Imperial 25cl (Super Bock)",
+    categoria: "Bebidas",
+    preco: "2.20€",
+    desc: "Servida bem fresca em copo gelado.",
+    imagem: "https://dyj6gt4964deb.cloudfront.net/images/1d1ddb83-065b-4f1d-8e0c-fffc8f2f9fbe.jpeg",
+    tag: "Pressão"
+  },
+  {
+    id: 15,
+    nome: "Cheesecake de Frutos Silvestres",
+    categoria: "Sobremesas",
+    preco: "5.50€",
+    desc: "Base crocante de bolacha amanteigada, creme aveludado e coulis caseiro de frutos vermelhos.",
+    imagem: "https://dyj6gt4964deb.cloudfront.net/images/crop-c66c6848-9325-493b-959d-791c31da9ffe.jpeg",
+    tag: "Sobremesa"
   }
 ];
 
-// 3. Tag visual por categoria
-function getTag(categoria) {
-  const tags = {
-    "Petiscos": { label: "Petisco", css: "menu-tag-petisco" },
-    "Bebidas":  { label: "Bebida",  css: "menu-tag-bebida"  },
-    "Pratos":   { label: "Prato",   css: "menu-tag-prato"   }
-  };
-  const t = tags[categoria] || { label: categoria, css: "" };
-  return `<span class="menu-tag ${t.css}">${t.label}</span>`;
-}
+// ============================================================
+// 2. RENDERIZAÇÃO DO MENU & FILTROS
+// ============================================================
+const menuGrid = document.getElementById("menuGrid");
+const menuSearchInput = document.getElementById("menuSearchInput");
+const menuTabs = document.getElementById("menuTabs");
 
-// 4. Renderizar itens na página
-const menuList = document.getElementById("menuList");
+let categoriaAtiva = "todos";
+let termoBusca = "";
 
-function renderMenu(itens) {
-  menuList.innerHTML = "";
+function renderizarMenu() {
+  if (!menuGrid) return;
+  menuGrid.innerHTML = "";
 
-  if (itens.length === 0) {
-    menuList.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">🌊</div>
-        <p>Nenhum item nesta categoria de momento.</p>
-      </div>`;
+  const filtrados = itensMenu.filter(item => {
+    const matchCat = categoriaAtiva === "todos" || item.categoria.toLowerCase() === categoriaAtiva.toLowerCase();
+    const matchBusca = termoBusca === "" || 
+      item.nome.toLowerCase().includes(termoBusca) || 
+      item.desc.toLowerCase().includes(termoBusca) ||
+      item.categoria.toLowerCase().includes(termoBusca);
+    return matchCat && matchBusca;
+  });
+
+  if (filtrados.length === 0) {
+    menuGrid.innerHTML = `
+      <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">
+        <p style="font-size: 2rem; margin-bottom: 8px;">🍽️</p>
+        <h4>Nenhum prato ou bebida encontrado com esse critério.</h4>
+        <p>Tente procurar por outro termo ou selecione "Todos".</p>
+      </div>
+    `;
     return;
   }
 
-  itens.forEach(item => {
-    const card = document.createElement("div");
-    card.className = "menu-card";
+  filtrados.forEach(item => {
+    const card = document.createElement("article");
+    card.className = "menu-item-card";
     card.innerHTML = `
-      <div class="menu-card-left">
-        <div class="menu-emoji">${item.emoji || "🍽️"}</div>
-        <div class="menu-info">
-          <h4>${item.nome}</h4>
-          <p>${item.desc}</p>
+      <img src="${item.imagem}" alt="${item.nome}" class="menu-item-img" loading="lazy">
+      <div class="menu-item-details">
+        <div>
+          <div class="menu-item-top">
+            <h4 class="menu-item-title">${item.nome}</h4>
+            <span class="menu-item-price">${item.preco}</span>
+          </div>
+          <p class="menu-item-desc">${item.desc}</p>
+        </div>
+        <div class="menu-item-footer">
+          <span class="menu-item-tag">${item.tag || item.categoria}</span>
+          <button class="btn-ubereats-sm" style="font-size:0.75rem;" onclick="abrirUberEatsItem()">
+            🛵 No Uber Eats
+          </button>
         </div>
       </div>
-      <div class="menu-price-wrap">
-        <span class="menu-price">${item.preco}</span>
-        ${getTag(item.categoria)}
-      </div>
     `;
-    menuList.appendChild(card);
+    menuGrid.appendChild(card);
   });
 }
 
-// 5. Filtrar por Categoria
-function filtrarMenu(categoria) {
-  document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
-  event.target.classList.add("active");
+function abrirUberEatsItem() {
+  window.open(UBER_EATS_URL, "_blank");
+}
 
-  if (categoria === "todos") {
-    renderMenu(pratos);
-  } else {
-    const filtrados = pratos.filter(item => item.categoria === categoria);
-    renderMenu(filtrados);
+// Ouvintes de Categoria
+if (menuTabs) {
+  menuTabs.addEventListener("click", (e) => {
+    const pill = e.target.closest(".cat-pill");
+    if (!pill) return;
+    document.querySelectorAll(".cat-pill").forEach(p => p.classList.remove("active"));
+    pill.classList.add("active");
+    categoriaAtiva = pill.dataset.category || "todos";
+    renderizarMenu();
+  });
+}
+
+// Ouvinte de Busca
+if (menuSearchInput) {
+  menuSearchInput.addEventListener("input", (e) => {
+    termoBusca = e.target.value.trim().toLowerCase();
+    renderizarMenu();
+  });
+}
+
+// ============================================================
+// 3. SELETOR DE MESAS (1 A 35) & BOTÃO "CHAMAR GARÇOM"
+// ============================================================
+const TOTAL_MESAS = 35;
+const tableGridContainer = document.getElementById("tableGridContainer");
+const selectedTableInput = document.getElementById("selectedTableNumber");
+const tableSelectedDisplay = document.getElementById("tableSelectedDisplay");
+const modalCallTable = document.getElementById("modalCallTable");
+const btnOpenCallModal = document.getElementById("btnOpenCallModal");
+const btnCloseCallModal = document.getElementById("btnCloseCallModal");
+const formCallWaiter = document.getElementById("formCallWaiter");
+const callSuccessBox = document.getElementById("callSuccessBox");
+const callSuccessMsg = document.getElementById("callSuccessMsg");
+
+// Gerar os 35 botões de mesa
+function gerarBotoesMesa() {
+  if (!tableGridContainer) return;
+  tableGridContainer.innerHTML = "";
+
+  for (let i = 1; i <= TOTAL_MESAS; i++) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "table-chip";
+    btn.textContent = `M${i}`;
+    btn.title = `Mesa ${i}`;
+    btn.dataset.mesa = i;
+
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".table-chip").forEach(c => c.classList.remove("selected"));
+      btn.classList.add("selected");
+      selectedTableInput.value = i;
+      tableSelectedDisplay.textContent = `Mesa selecionada: MESA ${i}`;
+    });
+
+    tableGridContainer.appendChild(btn);
   }
 }
 
-// 6. Controlo dos Modais
-function abrirModalChamar() {
-  document.getElementById("modalChamar").style.display = "flex";
+// Controlo do Modal de Chamada
+if (btnOpenCallModal) {
+  btnOpenCallModal.addEventListener("click", () => {
+    modalCallTable.style.display = "flex";
+    callSuccessBox.style.display = "none";
+    formCallWaiter.style.display = "block";
+  });
 }
 
-function abrirModalAvaliacao() {
-  document.getElementById("modalAvaliacao").style.display = "flex";
+if (btnCloseCallModal) {
+  btnCloseCallModal.addEventListener("click", () => {
+    fecharModalChamada();
+  });
 }
 
-function fecharModais() {
-  document.getElementById("modalChamar").style.display = "none";
-  document.getElementById("modalAvaliacao").style.display = "none";
+function fecharModalChamada() {
+  if (modalCallTable) modalCallTable.style.display = "none";
 }
 
-// Fechar modal ao clicar fora do conteúdo
-document.addEventListener("click", function (e) {
-  if (e.target.classList.contains("modal")) fecharModais();
+// Submissão do Alerta de Chamada de Mesa
+if (formCallWaiter) {
+  formCallWaiter.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const mesa = selectedTableInput.value;
+    if (!mesa) {
+      alert("Por favor, selecione o número da sua mesa (1 a 35).");
+      return;
+    }
+
+    const motivo = document.getElementById("callReason").value || "Atendimento";
+    const horaAtual = new Date();
+    const horaFormatada = horaAtual.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+
+    const novaChamada = {
+      id: 'call_' + Date.now(),
+      mesa: mesa,
+      motivo: motivo,
+      hora: horaFormatada,
+      timestamp: Date.now(),
+      status: 'ativa'
+    };
+
+    // 1. Guardar no localStorage
+    const chamadasExistentes = JSON.parse(localStorage.getItem('costa_in_chamadas') || '[]');
+    chamadasExistentes.unshift(novaChamada);
+    localStorage.setItem('costa_in_chamadas', JSON.stringify(chamadasExistentes));
+
+    // 2. Notificar o Admin em Tempo Real via BroadcastChannel e Storage
+    if (syncChannel) {
+      syncChannel.postMessage({ type: 'CHAMADA_MESA', payload: novaChamada });
+    }
+    // Disparo forçado para listeners de storage
+    localStorage.setItem('costa_in_sync_ping', JSON.stringify({ event: 'CHAMADA', time: Date.now(), mesa }));
+
+    // 3. Exibir confirmação na tela do cliente
+    formCallWaiter.style.display = "none";
+    callSuccessBox.style.display = "block";
+    callSuccessMsg.innerHTML = `O alerta para a <strong>Mesa ${mesa}</strong> (${motivo}) foi enviado ao balcão! O nosso empregado de mesa já se dirige até si.`;
+  });
+}
+
+// ============================================================
+// 4. FORMULÁRIO DE RESERVAS & MENSAGEM WHATSAPP
+// ============================================================
+const formReserva = document.getElementById("formReserva");
+const modalReservaConfirmada = document.getElementById("modalReservaConfirmada");
+const reservaSummaryBox = document.getElementById("reservaSummaryBox");
+const btnOpenWhatsAppDirect = document.getElementById("btnOpenWhatsAppDirect");
+
+// Preencher data mínima como hoje
+const resDataInput = document.getElementById("resData");
+if (resDataInput) {
+  const hoje = new Date().toISOString().split("T")[0];
+  resDataInput.min = hoje;
+  resDataInput.value = hoje;
+}
+
+if (formReserva) {
+  formReserva.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const nome = document.getElementById("resNome").value.trim();
+    const whatsapp = document.getElementById("resWhatsapp").value.trim();
+    const email = document.getElementById("resEmail").value.trim();
+    const data = document.getElementById("resData").value;
+    const hora = document.getElementById("resHora").value;
+    const pessoas = document.getElementById("resPessoas").value;
+    const zona = document.getElementById("resZona").value;
+    const obs = document.getElementById("resObs").value.trim();
+
+    if (!nome || !whatsapp || !data || !hora) {
+      alert("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    // Formatar data para exibição (ex: 15/11/2026)
+    const partesData = data.split("-");
+    const dataFormatada = `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
+
+    // Objeto da reserva
+    const novaReserva = {
+      id: 'res_' + Date.now(),
+      nome,
+      whatsapp,
+      email,
+      data: dataFormatada,
+      dataIso: data,
+      hora,
+      pessoas,
+      zona,
+      obs,
+      status: 'Pendente',
+      criadaEm: new Date().toISOString()
+    };
+
+    // Guardar no LocalStorage
+    const reservasExistentes = JSON.parse(localStorage.getItem('costa_in_reservas') || '[]');
+    reservasExistentes.unshift(novaReserva);
+    localStorage.setItem('costa_in_reservas', JSON.stringify(reservasExistentes));
+
+    // Notificar Admin em Tempo Real
+    if (syncChannel) {
+      syncChannel.postMessage({ type: 'NOVA_RESERVA', payload: novaReserva });
+    }
+    localStorage.setItem('costa_in_sync_ping', JSON.stringify({ event: 'RESERVA', time: Date.now() }));
+
+    // Montar mensagem solicitada pelo usuário para o WhatsApp:
+    // "Ola Francisca Agendamento marcado. Obrigado pelo agendamento, te aguardamos! Mais tarde confirmo o agendamento com voce !"
+    const textoMensagem = encodeURIComponent(
+      `Olá ${nome}! Agendamento marcado.\n` +
+      `📅 Data: ${dataFormatada} às ${hora}\n` +
+      `👥 Pessoas: ${pessoas} (${zona})\n\n` +
+      `Obrigado pelo agendamento, te aguardamos no Costa In Beach Bar! Mais tarde confirmo o agendamento com você!`
+    );
+
+    // Link para abrir diretamente no WhatsApp do Bar ou com a mensagem pronta
+    const linkWhatsApp = `https://wa.me/${WHATSAPP_BAR_NUMERO}?text=${textoMensagem}`;
+
+    // Preencher modal de confirmação
+    if (reservaSummaryBox) {
+      reservaSummaryBox.innerHTML = `
+        <p><strong>👤 Cliente:</strong> ${nome}</p>
+        <p><strong>📱 Telemóvel:</strong> ${whatsapp}</p>
+        <p><strong>📅 Data & Hora:</strong> ${dataFormatada} às ${hora}</p>
+        <p><strong>👥 Lugares:</strong> ${pessoas} pessoas (${zona})</p>
+        ${obs ? `<p><strong>📝 Nota:</strong> ${obs}</p>` : ''}
+      `;
+    }
+
+    if (btnOpenWhatsAppDirect) {
+      btnOpenWhatsAppDirect.href = linkWhatsApp;
+    }
+
+    // Exibir modal
+    if (modalReservaConfirmada) {
+      modalReservaConfirmada.style.display = "flex";
+    }
+
+    formReserva.reset();
+  });
+}
+
+function fecharModalReserva() {
+  if (modalReservaConfirmada) modalReservaConfirmada.style.display = "none";
+}
+
+// Fechar modais ao clicar no fundo escuro
+window.addEventListener("click", (e) => {
+  if (e.target === modalCallTable) fecharModalChamada();
+  if (e.target === modalReservaConfirmada) fecharModalReserva();
 });
 
-// 7. Ação: Chamar para Retirar via WhatsApp
-function enviarChamadaWhatsApp() {
-  const cliente = document.getElementById("identificacaoCliente").value.trim();
-  if (!cliente) {
-    alert("Por favor, indica a tua mesa ou nome.");
-    return;
-  }
-  const mensagem = encodeURIComponent(
-    `🛎️ Olá! O pedido da ${cliente} está pronto para retirar. — Costa In Beach Bar`
-  );
-  window.open(`https://wa.me/${NUMERO_BAR}?text=${mensagem}`, "_blank");
-  fecharModais();
-  document.getElementById("identificacaoCliente").value = "";
+// ============================================================
+// 5. COPIAR SENHA DO WI-FI
+// ============================================================
+function copiarSenhaWifi() {
+  const senha = "costain09";
+  navigator.clipboard.writeText(senha).then(() => {
+    const msg = document.getElementById("wifiCopiedMsg");
+    if (msg) {
+      msg.style.display = "inline-block";
+      setTimeout(() => { msg.style.display = "none"; }, 3000);
+    }
+  }).catch(() => {
+    alert("Senha do Wi-Fi: costain09");
+  });
 }
 
-// 8. Ação: Enviar Agradecimento + Link Google Review
-function enviarLinkAvaliacao() {
-  const telefone = document.getElementById("telefoneCliente").value.trim().replace(/\D/g, "");
-  if (!telefone) {
-    alert("Por favor, insere o telemóvel do cliente.");
-    return;
-  }
-  const textoAgradecimento = encodeURIComponent(
-    `🌊☀️ Muito obrigado pela tua visita ao Costa In Beach Bar!\n` +
-    `A tua opinião é fundamental para nós. Podes deixar uma avaliação rápida no Google? Leva menos de 1 minuto:\n` +
-    `${LINK_GOOGLE_REVIEW}`
-  );
-  window.open(`https://wa.me/${telefone}?text=${textoAgradecimento}`, "_blank");
-  fecharModais();
-  document.getElementById("telefoneCliente").value = "";
+// ============================================================
+// 6. MENU MOBILE GAVETA
+// ============================================================
+const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+const mobileDrawer = document.getElementById("mobileDrawer");
+
+if (mobileMenuBtn && mobileDrawer) {
+  mobileMenuBtn.addEventListener("click", () => {
+    mobileDrawer.classList.toggle("open");
+  });
+
+  mobileDrawer.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      mobileDrawer.classList.remove("open");
+    });
+  });
 }
 
-// Inicializar
-renderMenu(pratos);
+// ============================================================
+// 7. INICIALIZAÇÃO
+// ============================================================
+document.addEventListener("DOMContentLoaded", () => {
+  renderizarMenu();
+  gerarBotoesMesa();
+});

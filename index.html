@@ -2,100 +2,622 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 
-  <!-- SEO Básico para Pesquisa Local -->
-  <title>Costa In Beach Bar | Ementa & Reservas</title>
-  <meta name="description" content="Desfrute dos melhores petiscos, bebidas e refeições à beira-mar na Costa da Caparica. Faça a sua reserva online.">
-  <meta name="keywords" content="beach bar caparica, restaurante praia caparica, ementa costa in, reservas praia">
-  <meta name="theme-color" content="#0077b6">
+  <!-- SEO & Metadados -->
+  <title>Costa In Beach Bar & Club | Costa da Caparica</title>
+  <meta name="description" content="Com mais de 10 anos de praia na Costa da Caparica, o Costa In Beach Bar é conhecido pela sua culinária maravilhosa, drinks únicos, sunsets inesquecíveis e entregas pelo Uber Eats.">
+  <meta name="keywords" content="costa in beach bar, costa da caparica restaurante, beach club caparica, reservas costa in, uber eats costa in beach bar">
+  <meta name="theme-color" content="#ffb43f">
 
-  <!-- SEO Avançado: Dados Estruturados Schema.org para o Google -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BarOrPub",
-    "name": "Costa In Beach Bar",
-    "image": "https://oddmenu.com/images/default.jpg",
-    "telephone": "+351912345678",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Costa da Caparica",
-      "addressRegion": "Setúbal",
-      "addressCountry": "PT"
-    },
-    "servesCuisine": ["Petiscos", "Bebidas", "Peixe Fresco"],
-    "priceRange": "€€"
-  }
-  </script>
+  <!-- Google Fonts: Playfair Display + Rubik + Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- ===== CABEÇALHO ===== -->
-  <header class="header">
-    <div class="header-logo">🌊</div>
-    <h1>Costa <span>In</span> Beach Bar</h1>
-    <p class="header-sub">Costa da Caparica · Beira-Mar</p>
-    <div class="header-badges">
-      <span class="badge badge-open">✅ Aberto Agora</span>
-      <span class="badge">📍 Costa da Caparica</span>
-      <span class="badge">☀️ Vista Mar</span>
+  <!-- ===== BARRA SUPERIOR: UBER EATS DELIVERY ===== -->
+  <aside class="top-announcement">
+    <div class="container announcement-content">
+      <span class="delivery-badge">🛵 UBER EATS DELIVERY</span>
+      <p>Receba a nossa culinária no conforto de casa ou na praia!</p>
+      <a href="https://www.ubereats.com/pt-en/store/costa-in-beach-club/j9DAntXeTrCOyTynN_Exfg?srsltid=AYCX9vIeUFoIWbxunwOSEhuOVMgpFiL8JHHTA4WefKUHWAuq8098JEnL" 
+         target="_blank" rel="noopener noreferrer" class="btn-ubereats-sm">
+        Pedir no Uber Eats &rarr;
+      </a>
+    </div>
+  </aside>
+
+  <!-- ===== CABEÇALHO / NAVBAR ===== -->
+  <header class="navbar" id="navbar">
+    <div class="container nav-container">
+      <a href="#hero" class="nav-logo">
+        <img src="https://dyj6gt4964deb.cloudfront.net/images/1d1ddb83-065b-4f1d-8e0c-fffc8f2f9fbe.jpeg" alt="Logo Costa In Beach Bar" class="logo-img">
+        <div class="logo-text">
+          <span class="brand-title">Costa In</span>
+          <span class="brand-sub">Beach Bar & Club</span>
+        </div>
+      </a>
+
+      <!-- Menu de Navegação Desktop -->
+      <nav class="nav-links">
+        <a href="#quem-somos">Quem Somos</a>
+        <a href="#servicos">Experiências</a>
+        <a href="#menu-secao">Ementa / Menu</a>
+        <a href="#reservas">Reservas</a>
+        <a href="#ubereats">Uber Eats</a>
+        <a href="#localizacao">Contactos</a>
+      </nav>
+
+      <!-- Botões de Ação na Nav -->
+      <div class="nav-actions">
+        <a href="#reservas" class="btn btn-primary">Fazer Reserva</a>
+        <a href="admin.html" class="btn-admin-link" title="Área de Gerência / Administrador">
+          <span class="admin-icon">⚙️</span>
+          <span class="admin-label">Admin</span>
+        </a>
+      </div>
+
+      <!-- Menu Mobile Hambúrguer -->
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
 
-    <!-- Onda decorativa no fundo do header -->
-    <div class="wave-container">
-      <svg viewBox="0 0 1200 44" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,22 C150,44 350,0 600,22 C850,44 1050,0 1200,22 L1200,44 L0,44 Z" fill="#f0f8ff"/>
-      </svg>
+    <!-- Gaveta Mobile -->
+    <div class="mobile-drawer" id="mobileDrawer">
+      <a href="#quem-somos" class="mobile-link">Quem Somos</a>
+      <a href="#servicos" class="mobile-link">Experiências</a>
+      <a href="#menu-secao" class="mobile-link">Ementa / Menu</a>
+      <a href="#reservas" class="mobile-link">Fazer Reserva</a>
+      <a href="https://www.ubereats.com/pt-en/store/costa-in-beach-club/j9DAntXeTrCOyTynN_Exfg?srsltid=AYCX9vIeUFoIWbxunwOSEhuOVMgpFiL8JHHTA4WefKUHWAuq8098JEnL" target="_blank" class="mobile-link uber-highlight">🛵 Pedir no Uber Eats</a>
+      <a href="#localizacao" class="mobile-link">Onde Estamos & Wi-Fi</a>
+      <a href="admin.html" class="mobile-link admin-nav-link">⚙️ Painel do Gerente (Admin)</a>
     </div>
   </header>
 
-  <!-- ===== FILTRO DE CATEGORIAS ===== -->
-  <nav class="categories" id="categoryTabs">
-    <button class="tab active" onclick="filtrarMenu('todos')">🍽️ Todos</button>
-    <button class="tab" onclick="filtrarMenu('Petiscos')">🦑 Petiscos</button>
-    <button class="tab" onclick="filtrarMenu('Bebidas')">🍺 Bebidas</button>
-    <button class="tab" onclick="filtrarMenu('Pratos')">🐙 Pratos</button>
-  </nav>
+  <!-- ===== HERO SECTION ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <div class="hero-tag">
+        <span class="pulse-dot"></span> Costa da Caparica · Apoio 19
+      </div>
+      <h1 class="hero-title">Mais de 10 Anos de Alma Praiana, Sabores Únicos e Bons Momentos.</h1>
+      <p class="hero-desc">
+        A brisa do Atlântico, os melhores petiscos da praia, cocktails artesanais refrescantes e o pôr do sol mais vibrante de Portugal. Sinta-se em casa com os pés na areia.
+      </p>
 
-  <!-- ===== LISTA DE ITENS DO MENU ===== -->
-  <main class="menu-container" id="menuList">
-    <!-- Itens inseridos dinamicamente pelo JavaScript -->
-  </main>
+      <div class="hero-buttons">
+        <a href="#reservas" class="btn btn-hero-primary">📅 Reservar a Sua Mesa</a>
+        <a href="#menu-secao" class="btn btn-hero-secondary">🍽️ Ver Ementa Digital</a>
+        <a href="https://www.ubereats.com/pt-en/store/costa-in-beach-club/j9DAntXeTrCOyTynN_Exfg?srsltid=AYCX9vIeUFoIWbxunwOSEhuOVMgpFiL8JHHTA4WefKUHWAuq8098JEnL" 
+           target="_blank" rel="noopener noreferrer" class="btn btn-hero-uber">
+          <span>🛵</span> Uber Eats
+        </a>
+      </div>
 
-  <!-- Footer discreto -->
-  <footer class="footer">🌊 Costa In Beach Bar · Feito com ♥ na Caparica</footer>
+      <!-- Quick Highlights Bar -->
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number">+10</span>
+          <span class="stat-label">Anos de Tradição de Praia</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">35</span>
+          <span class="stat-label">Mesas & Esplanada com Vista Mar</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">★ 4.8</span>
+          <span class="stat-label">Cocktails & Culinária Elogiada</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Ingredientes Frescos e Selecionados</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <!-- ===== AÇÕES RÁPIDAS ===== -->
-  <div class="action-bar">
-    <button class="btn btn-call" onclick="abrirModalChamar()">🛎️ Chamar para Retirar</button>
-    <button class="btn btn-review" onclick="abrirModalAvaliacao()">⭐ Avaliação</button>
+  <!-- ===== QUEM SOMOS NÓS ===== -->
+  <section class="about-section" id="quem-somos">
+    <div class="container about-grid">
+      <div class="about-text-col">
+        <div class="section-badge">QUEM SOMOS</div>
+        <h2 class="section-title">O Teu Refúgio à Beira do Oceano na Costa da Caparica</h2>
+        <p class="about-lead">
+          Com mais de 10 anos de história gravados na areia e no coração da Caparica, o <strong>Costa In Beach Bar</strong> consolidou-se como um dos destinos gastronómicos mais autênticos e acolhedores da costa.
+        </p>
+        <p class="about-paragraph">
+          Nascemos da paixão pelo mar, pelas pessoas e pela arte de bem servir. Somos conhecidos pela nossa <em>maravilhosa culinária</em> — desde marisco e peixe fresco, tostas de pão alentejano até pizzas artesanais e hambúrgueres gourmet —, complementada por uma carta de <em>drinks e cocktails de autor</em> preparados na hora para celebrar a vida a cada pôr do sol.
+        </p>
+        <p class="about-paragraph">
+          Quer venha para um brunch descontraído, um almoço em família, um final de tarde ao som da praia ou uma refeição rápida através do nosso serviço de entregas <strong>Uber Eats</strong>, o Costa In é o seu lugar de eleição.
+        </p>
+        <div class="about-features">
+          <div class="feature-item">
+            <span class="feature-icon">🦐</span>
+            <div>
+              <h4>Culinária com Alma</h4>
+              <p>Receitas ricas, petiscos frescos e opções para todos os gostos.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">🍹</span>
+            <div>
+              <h4>Drinks & Mixologia</h4>
+              <p>Sangrias artesanais, caipirinhas perfeitas e cocktails refrescantes.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">☀️</span>
+            <div>
+              <h4>Atmosfera Sunset Única</h4>
+              <p>Ambiente descontraído, boa música e vista privilegiada para o oceano.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-visual-col">
+        <div class="about-card-banner">
+          <img src="https://dyj6gt4964deb.cloudfront.net/images/16230ac9-dcb9-4224-a988-2d61c60b96ae.jpeg" alt="Costa In Beach Bar Vista Panorâmica" class="about-main-photo">
+          <div class="experience-badge">
+            <span class="badge-big">+10</span>
+            <span class="badge-text">Anos de Tradição à Beira-Mar</span>
+          </div>
+        </div>
+        <div class="about-mini-cards">
+          <div class="mini-card">
+            <img src="https://dyj6gt4964deb.cloudfront.net/images/b74eb4ca-c085-456d-945c-a983a25785ca.jpeg" alt="Brunch e Delícias">
+            <span>Brunches & Tostas</span>
+          </div>
+          <div class="mini-card">
+            <img src="https://dyj6gt4964deb.cloudfront.net/images/7bf22938-6efb-432b-8ce4-8428edd068f8.jpeg" alt="Petiscos de Praia">
+            <span>Petiscos Frescos</span>
+          </div>
+          <div class="mini-card">
+            <img src="https://dyj6gt4964deb.cloudfront.net/images/77c7336b-3959-4d14-812f-0f8b8b951a5c.jpeg" alt="Pizzas Forno">
+            <span>Pizzas Artesanais</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== NOSSOS SERVIÇOS & EXPERIÊNCIAS ===== -->
+  <section class="services-section" id="servicos">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-badge">O QUE FAZEMOS</span>
+        <h2 class="section-title">Experiências Feitas Para Você Desfrutar</h2>
+        <p class="section-subtitle">Do primeiro café da manhã aos brindes do anoitecer, viva o melhor da Caparica connosco.</p>
+      </div>
+
+      <div class="services-grid">
+        <!-- Serviço 1: Petiscos & Gastronomia -->
+        <article class="service-card">
+          <div class="service-img-wrap">
+            <img src="https://dyj6gt4964deb.cloudfront.net/images/7f4e0499-f35c-4fec-a4e7-69a370eb5e8b.jpeg" alt="Pratos e Culinária Maravilhosa">
+            <span class="service-tag">Gastronomia</span>
+          </div>
+          <div class="service-info">
+            <h3>Culinária Maravilhosa & Petiscos</h3>
+            <p>Chocos fritos à setubalense, saladas frescas, massas saborosas, tostas no pão alentejano e pratos que homenageiam o mar.</p>
+            <a href="#menu-secao" class="service-link">Consultar Ementa &rarr;</a>
+          </div>
+        </article>
+
+        <!-- Serviço 2: Cocktails & Sunset Bar -->
+        <article class="service-card">
+          <div class="service-img-wrap">
+            <img src="https://dyj6gt4964deb.cloudfront.net/images/ebe04665-e7f2-4e4e-8679-c4f14237f811.jpeg" alt="Cocktails e Drinks">
+            <span class="service-tag">Beach Bar</span>
+          </div>
+          <div class="service-info">
+            <h3>Drinks, Cervejas & Cocktails</h3>
+            <p>Cerveja bem gelada, sangrias de fruta fresca, caipirinhas, mojitos e cocktails de assinatura perfeitos para celebrar o entardecer.</p>
+            <a href="#menu-secao" class="service-link">Ver Bebidas &rarr;</a>
+          </div>
+        </article>
+
+        <!-- Serviço 3: Esplanada e Mesas Pé na Areia -->
+        <article class="service-card">
+          <div class="service-img-wrap">
+            <img src="https://dyj6gt4964deb.cloudfront.net/images/crop-a8266a99-cc0c-4fb9-a9aa-31f64d62c3c0.jpeg" alt="Esplanada com 35 Mesas">
+            <span class="service-tag">Ambiente</span>
+          </div>
+          <div class="service-info">
+            <h3>Esplanada com 35 Mesas & Conforto</h3>
+            <p>Espaço amplo e arejado com cerca de 35 mesas preparadas para grupos, amigos e famílias, com vista panorâmica para o oceano.</p>
+            <a href="#reservas" class="service-link">Reservar a Sua Mesa &rarr;</a>
+          </div>
+        </article>
+
+        <!-- Serviço 4: Entregas Uber Eats -->
+        <article class="service-card highlight-uber-card">
+          <div class="service-img-wrap">
+            <img src="https://dyj6gt4964deb.cloudfront.net/images/4764230c-1660-4584-9dee-2276d61021ac.jpeg" alt="Entrega Uber Eats">
+            <span class="service-tag uber-tag">🛵 Uber Eats</span>
+          </div>
+          <div class="service-info">
+            <h3>Takeaway & Entregas ao Domicílio</h3>
+            <p>O melhor sabor do Costa In Beach Bar entregue rapidamente onde você estiver através da nossa parceria oficial com a Uber Eats.</p>
+            <a href="https://www.ubereats.com/pt-en/store/costa-in-beach-club/j9DAntXeTrCOyTynN_Exfg?srsltid=AYCX9vIeUFoIWbxunwOSEhuOVMgpFiL8JHHTA4WefKUHWAuq8098JEnL" target="_blank" rel="noopener noreferrer" class="service-link uber-green-link">Pedir Agora no Uber Eats &rarr;</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== EMENTA DIGITAL / MENU ===== -->
+  <section class="menu-section" id="menu-secao">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-badge">EMENTA DIGITAL</span>
+        <h2 class="section-title">Sabores do Costa In Beach Bar</h2>
+        <p class="section-subtitle">Escolha uma categoria, pesquise pratos ou chame o empregado de mesa com um simples toque!</p>
+      </div>
+
+      <!-- Barra de Pesquisa de Itens -->
+      <div class="menu-search-wrapper">
+        <div class="search-input-box">
+          <span class="search-icon">🔍</span>
+          <input type="search" id="menuSearchInput" placeholder="Procurar prato, bebida ou ingrediente (ex: Choco, Caipirinha, Pizza)...">
+        </div>
+      </div>
+
+      <!-- Tabs de Categorias (Alinhadas ao cardápio original do Costa In) -->
+      <div class="category-scroll-container">
+        <div class="category-tabs" id="menuTabs">
+          <button class="cat-pill active" data-category="todos">✨ Todos</button>
+          <button class="cat-pill" data-category="Petiscos">🦑 Petiscos & Starters</button>
+          <button class="cat-pill" data-category="Pratos">🐟 Pratos Principais</button>
+          <button class="cat-pill" data-category="Pizzas">🍕 Pizzas</button>
+          <button class="cat-pill" data-category="Burgers">🍔 Burgers & Tostas</button>
+          <button class="cat-pill" data-category="Saladas">🥗 Saladas Frescas</button>
+          <button class="cat-pill" data-category="Pastas">🍝 Pastas</button>
+          <button class="cat-pill" data-category="Bebidas">🍹 Cocktails & Bebidas</button>
+          <button class="cat-pill" data-category="Sobremesas">🍰 Sobremesas</button>
+        </div>
+      </div>
+
+      <!-- Container Dinâmico dos Cards do Menu -->
+      <div class="menu-grid" id="menuGrid">
+        <!-- Injetado via app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DESTAQUE UBER EATS ===== -->
+  <section class="ubereats-banner-section" id="ubereats">
+    <div class="container ubereats-box">
+      <div class="ubereats-text">
+        <div class="uber-badge-inline">
+          <span class="uber-dot"></span> PARCERIA OFICIAL UBER EATS
+        </div>
+        <h2>Prefere Saborear em Casa ou no Hotel?</h2>
+        <p>
+          O Costa In Beach Club está disponível na aplicação <strong>Uber Eats</strong>. Faça o seu pedido online e receba as nossas especialidades com rapidez e qualidade máxima.
+        </p>
+        <div class="uber-perks">
+          <span>⚡ Entrega Rápida</span>
+          <span>🍔 Embalagem Térmica Segura</span>
+          <span>💳 Pagamento Fácil na App</span>
+        </div>
+      </div>
+      <div class="ubereats-action-col">
+        <a href="https://www.ubereats.com/pt-en/store/costa-in-beach-club/j9DAntXeTrCOyTynN_Exfg?srsltid=AYCX9vIeUFoIWbxunwOSEhuOVMgpFiL8JHHTA4WefKUHWAuq8098JEnL" 
+           target="_blank" rel="noopener noreferrer" class="btn-uber-big">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Uber_Eats_2020_logo.svg" alt="Uber Eats" class="uber-logo-svg">
+          <span>Abrir no Uber Eats</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FORMULÁRIO DE RESERVAS ===== -->
+  <section class="reservation-section" id="reservas">
+    <div class="container">
+      <div class="reservation-wrapper">
+        <div class="reservation-info-col">
+          <span class="section-badge badge-light">GARANTA O SEU LUGAR</span>
+          <h2 class="reservation-title">Faça a Sua Reserva no Costa In</h2>
+          <p class="reservation-desc">
+            Desfrute das nossas 35 mesas privilegiadas com vista para o mar da Costa da Caparica. Seja para um almoço em família, um sunset com amigos ou uma celebração especial, reserve com antecedência e garanta a melhor mesa.
+          </p>
+
+          <div class="reservation-perks-list">
+            <div class="r-perk">
+              <span class="r-icon">📲</span>
+              <div>
+                <strong>Confirmação Imediata no WhatsApp</strong>
+                <p>Assim que enviar a reserva, recebe a mensagem de confirmação instantânea no seu telemóvel.</p>
+              </div>
+            </div>
+            <div class="r-perk">
+              <span class="r-icon">🤖</span>
+              <div>
+                <strong>Lembrete Inteligente 1h Antes</strong>
+                <p>O nosso agente de atendimento envia-lhe um lembrete no WhatsApp 1 hora antes da sua refeição.</p>
+              </div>
+            </div>
+            <div class="r-perk">
+              <span class="r-icon">🌊</span>
+              <div>
+                <strong>Vista Panorâmica do Atlântico</strong>
+                <p>Lugares confortáveis na esplanada, no salão ou junto à areia.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reservation-form-col">
+          <form class="reservation-form" id="formReserva">
+            <h3 class="form-title">Preencha os Seus Dados</h3>
+
+            <div class="form-group">
+              <label for="resNome">Nome Completo *</label>
+              <input type="text" id="resNome" required placeholder="Ex: Francisca Silva">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="resWhatsapp">WhatsApp / Telemóvel *</label>
+                <input type="tel" id="resWhatsapp" required placeholder="Ex: +351 912 345 678">
+                <small class="field-hint">Receberá a confirmação da reserva neste número.</small>
+              </div>
+              <div class="form-group">
+                <label for="resEmail">Email de Contacto *</label>
+                <input type="email" id="resEmail" required placeholder="francisca@email.com">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="resData">Data Desejada *</label>
+                <input type="date" id="resData" required>
+              </div>
+              <div class="form-group">
+                <label for="resHora">Hora da Reserva *</label>
+                <select id="resHora" required>
+                  <option value="">Selecione o horário...</option>
+                  <option value="12:00">12:00 (Almoço)</option>
+                  <option value="12:30">12:30</option>
+                  <option value="13:00">13:00</option>
+                  <option value="13:30">13:30</option>
+                  <option value="14:00">14:00</option>
+                  <option value="14:30">14:30</option>
+                  <option value="15:00">15:00</option>
+                  <option value="17:00">17:00 (Sunset / Drinks)</option>
+                  <option value="18:00">18:00</option>
+                  <option value="19:00">19:00 (Jantar)</option>
+                  <option value="19:30">19:30</option>
+                  <option value="20:00">20:00</option>
+                  <option value="20:30">20:30</option>
+                  <option value="21:00">21:00</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="resPessoas">Número de Pessoas *</label>
+                <select id="resPessoas" required>
+                  <option value="1">1 Pessoa</option>
+                  <option value="2" selected>2 Pessoas</option>
+                  <option value="3">3 Pessoas</option>
+                  <option value="4">4 Pessoas</option>
+                  <option value="5">5 Pessoas</option>
+                  <option value="6">6 Pessoas</option>
+                  <option value="7">7 Pessoas</option>
+                  <option value="8">8+ Pessoas (Grupo)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="resZona">Preferência de Mesa</label>
+                <select id="resZona">
+                  <option value="Esplanada Vista Mar">Esplanada Vista Mar</option>
+                  <option value="Pé na Areia">Zona Pé na Areia</option>
+                  <option value="Salão Interior">Interior / Acolhedor</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="resObs">Observações / Ocasião Especial</label>
+              <textarea id="resObs" rows="2" placeholder="Ex: Aniversário, cadeira de bebé, mesa na sombra..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-submit-reserva" id="btnSubmitReserva">
+              <span>📅 Confirmar e Solicitar Reserva</span>
+            </button>
+            <p class="form-footer-notice">
+              Ao reservar, a mensagem de agendamento automático será preparada para envio via WhatsApp com a equipa do Costa In.
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LOCALIZAÇÃO, MAPA & WI-FI ===== -->
+  <section class="location-section" id="localizacao">
+    <div class="container">
+      <div class="location-grid">
+        <div class="location-card">
+          <span class="location-icon">📍</span>
+          <h3>Onde Estamos</h3>
+          <p class="location-address">
+            <strong>Farmacia Chai, Muralha da Praia / Apoio 19</strong><br>
+            Av. Gen. Humberto Delgado Frente<br>
+            2825-337 Costa da Caparica, Portugal
+          </p>
+          <a href="http://maps.google.com/?q=Farmacia Chai, Muralha da Praia /Apoio 19, Av. Gen. Humberto Delgado Frente, 2825-337 Costa da Caparica, Costa da Caparica, Portugal" 
+             target="_blank" rel="noopener noreferrer" class="btn btn-outline-map">
+            Abrir no Google Maps &rarr;
+          </a>
+        </div>
+
+        <div class="location-card wifi-highlight-card">
+          <span class="location-icon">📶</span>
+          <h3>Wi-Fi Gratuito de Clientes</h3>
+          <p>Conecte-se facilmente à nossa rede de alta velocidade na esplanada:</p>
+          <div class="wifi-box">
+            <span class="wifi-label">Rede / Password:</span>
+            <span class="wifi-code" id="wifiPass">costain09</span>
+            <button class="btn-copy-wifi" id="btnCopyWifi" onclick="copiarSenhaWifi()">
+              📋 Copiar Senha
+            </button>
+          </div>
+          <span class="wifi-copied-msg" id="wifiCopiedMsg">Senha copiada com sucesso!</span>
+        </div>
+
+        <div class="location-card">
+          <span class="location-icon">🕒</span>
+          <h3>Horário de Funcionamento</h3>
+          <ul class="hours-list">
+            <li><span>Segunda a Quinta:</span> <strong>10:00 – 22:00</strong></li>
+            <li><span>Sexta e Sábado:</span> <strong>10:00 – 00:00</strong></li>
+            <li><span>Domingo:</span> <strong>10:00 – 22:30</strong></li>
+            <li class="kitchen-note">Cozinha sempre ativa com petiscos e refeições frescas.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RODAPÉ ===== -->
+  <footer class="footer-main">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="https://dyj6gt4964deb.cloudfront.net/images/1d1ddb83-065b-4f1d-8e0c-fffc8f2f9fbe.jpeg" alt="Costa In Logo" class="footer-logo-img">
+          <div>
+            <h3>Costa In Beach Bar</h3>
+            <p>Mais de 10 anos de praia e bons momentos na Costa da Caparica.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <h4>Navegação</h4>
+        <ul>
+          <li><a href="#quem-somos">Quem Somos</a></li>
+          <li><a href="#servicos">Experiências</a></li>
+          <li><a href="#menu-secao">Ementa Digital</a></li>
+          <li><a href="#reservas">Reservas</a></li>
+          <li><a href="https://www.ubereats.com/pt-en/store/costa-in-beach-club/j9DAntXeTrCOyTynN_Exfg?srsltid=AYCX9vIeUFoIWbxunwOSEhuOVMgpFiL8JHHTA4WefKUHWAuq8098JEnL" target="_blank">Uber Eats</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-admin-box">
+        <h4>Acesso de Gerência</h4>
+        <p>Acompanhe chamadas de mesas em tempo real e confirme reservas:</p>
+        <a href="admin.html" class="btn btn-footer-admin">
+          ⚙️ Aceder ao Painel Admin
+        </a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-flex">
+        <p>© 2026 Costa In Beach Bar & Club. Todos os direitos reservados. Costa da Caparica, Portugal.</p>
+        <span class="made-beach">🌊 Pé na areia, sabor no prato</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================
+       BOTÃO FLUTUANTE REDONDO: "CHAMAR GARÇOM" (35 MESAS)
+       ======================================================== -->
+  <div class="floating-call-container">
+    <button class="btn-round-call" id="btnOpenCallModal" aria-label="Chamar Garçom">
+      <div class="bell-wave"></div>
+      <span class="call-icon">🛎️</span>
+      <span class="call-text">CHAMAR</span>
+    </button>
   </div>
 
-  <!-- ===== MODAL: Chamar para Retirar ===== -->
-  <div id="modalChamar" class="modal">
-    <div class="modal-content">
-      <h3>🛎️ Chamar Funcionário</h3>
-      <p>Indica a tua mesa ou nome para sabermos quem retirar o pedido:</p>
-      <input type="text" id="identificacaoCliente" placeholder="Ex: Mesa 4 ou João">
-      <button class="btn btn-call" onclick="enviarChamadaWhatsApp()">📲 Enviar no WhatsApp</button>
-      <button class="btn btn-close" onclick="fecharModais()">Cancelar</button>
+  <!-- MODAL: SELETOR DE MESA (1 A 35) & MOTIVO DA CHAMADA -->
+  <div class="modal-overlay" id="modalCallTable">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" id="btnCloseCallModal">&times;</button>
+      
+      <div class="modal-header-icon">🛎️</div>
+      <h3 class="modal-title">Chamar Funcionário à Mesa</h3>
+      <p class="modal-subtitle">Indique a sua mesa para a nossa equipa atender de imediato:</p>
+
+      <form id="formCallWaiter">
+        <div class="table-selector-section">
+          <label class="modal-label">Selecione o Número da Sua Mesa (1 a 35):</label>
+          <div class="table-grid" id="tableGridContainer">
+            <!-- Gerado dinamicamente: Botões 1 a 35 -->
+          </div>
+          <input type="hidden" id="selectedTableNumber" value="" required>
+          <p class="table-selected-display" id="tableSelectedDisplay">Nenhuma mesa selecionada.</p>
+        </div>
+
+        <div class="form-group modal-reason-group">
+          <label class="modal-label" for="callReason">Qual é o motivo da chamada?</label>
+          <select id="callReason" class="modal-select">
+            <option value="Fazer Pedido">🍽️ Fazer novo pedido</option>
+            <option value="Pedir a Conta">💳 Pedir a conta</option>
+            <option value="Dúvida da Ementa">❓ Dúvida sobre a ementa</option>
+            <option value="Outro Auxílio">🙋 Outro auxílio</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-confirm-call" id="btnConfirmCall">
+          🛎️ Chamar Garçom Agora
+        </button>
+      </form>
+
+      <!-- Mensagem de feedback após chamar -->
+      <div class="call-success-box" id="callSuccessBox" style="display: none;">
+        <span class="success-checkmark">✅</span>
+        <h4>Chamada Enviada com Sucesso!</h4>
+        <p id="callSuccessMsg">O alerta foi transmitido para o balcão. O nosso empregado de mesa já se dirige à sua mesa.</p>
+        <button class="btn btn-close-success" onclick="fecharModalChamada()">Entendido</button>
+      </div>
     </div>
   </div>
 
-  <!-- ===== MODAL: Agradecimento + Google Review ===== -->
-  <div id="modalAvaliacao" class="modal">
-    <div class="modal-content">
-      <h3>⭐ Agradecimento & Avaliação</h3>
-      <p>Insere o telemóvel do cliente para enviar um agradecimento com o link de avaliação do Google:</p>
-      <input type="tel" id="telefoneCliente" placeholder="Ex: 351912345678">
-      <button class="btn btn-review" onclick="enviarLinkAvaliacao()">💬 Enviar via WhatsApp</button>
-      <button class="btn btn-close" onclick="fecharModais()">Fechar</button>
+  <!-- MODAL DE CONFIRMAÇÃO DE RESERVA / WHATSAPP -->
+  <div class="modal-overlay" id="modalReservaConfirmada">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" onclick="fecharModalReserva()">&times;</button>
+      <div class="modal-header-icon">🎉</div>
+      <h3 class="modal-title">Reserva Solicitada com Sucesso!</h3>
+      <p class="modal-subtitle" id="reservaFeedbackText">
+        Olá! O seu pedido de reserva foi registado e enviado para a nossa equipa.
+      </p>
+
+      <div class="reserva-summary-box" id="reservaSummaryBox">
+        <!-- Detalhes preenchidos via JS -->
+      </div>
+
+      <div class="whatsapp-prompt-box">
+        <p class="whatsapp-note">
+          📲 Deseja abrir a mensagem de agendamento diretamente no seu WhatsApp para confirmar de imediato com o gerente?
+        </p>
+        <a href="#" id="btnOpenWhatsAppDirect" target="_blank" class="btn btn-whatsapp-direct">
+          💬 Abrir WhatsApp e Enviar Mensagem
+        </a>
+      </div>
+
+      <button class="btn btn-close-modal-alt" onclick="fecharModalReserva()">Concluir</button>
     </div>
   </div>
 
+  <!-- Scripts -->
   <script src="app.js"></script>
 </body>
 </html>

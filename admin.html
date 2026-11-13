@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel do Gerente | Costa In Beach Bar</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+
+  <!-- ===== BARRA SUPERIOR DO ADMIN ===== -->
+  <header class="admin-topbar">
+    <div class="admin-container topbar-flex">
+      <div class="admin-brand">
+        <a href="index.html" class="admin-back-link" title="Voltar ao Site Principal">
+          &larr; Ver Site
+        </a>
+        <div class="admin-logo-wrap">
+          <img src="https://dyj6gt4964deb.cloudfront.net/images/1d1ddb83-065b-4f1d-8e0c-fffc8f2f9fbe.jpeg" alt="Logo" class="admin-logo">
+          <div>
+            <h1>Painel de Gerência & Monitor</h1>
+            <p>Costa In Beach Bar · Apoio 19 Caparica</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-controls-right">
+        <!-- Indicador de Sincronização em Tempo Real -->
+        <div class="live-status-pill">
+          <span class="live-dot pulse"></span>
+          <span>Tempo Real Ativo</span>
+        </div>
+
+        <!-- Alternador de Som do Alarme -->
+        <button id="btnToggleSound" class="btn-sound-toggle" onclick="toggleAudioAlert()">
+          <span id="soundIcon">🔔</span>
+          <span id="soundText">Som: Ligado</span>
+        </button>
+
+        <!-- Botão Teste Rápido de Mesa -->
+        <button class="btn-test-call" onclick="simularChamadaMesa(15)">
+          ⚡ Simular Mesa 15
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== CONTEÚDO PRINCIPAL DO ADMIN ===== -->
+  <main class="admin-main">
+    <div class="admin-container">
+
+      <!-- ===== ESTATÍSTICAS RÁPIDAS ===== -->
+      <section class="admin-stats-row">
+        <div class="stat-card stat-alert-card">
+          <div class="stat-card-icon">🛎️</div>
+          <div class="stat-card-data">
+            <span class="stat-card-value" id="countActiveCalls">0</span>
+            <span class="stat-card-title">Chamadas de Mesa Ativas</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card-icon">📅</div>
+          <div class="stat-card-data">
+            <span class="stat-card-value" id="countTodayReservations">0</span>
+            <span class="stat-card-title">Reservas Registadas</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card-icon">👥</div>
+          <div class="stat-card-data">
+            <span class="stat-card-value" id="countTotalPeople">0</span>
+            <span class="stat-card-title">Pessoas Esperadas</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card-icon">🏖️</div>
+          <div class="stat-card-data">
+            <span class="stat-card-value">35</span>
+            <span class="stat-card-title">Total de Mesas no Local</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== MONITOR DE MESAS CHAMANDO EM TEMPO REAL ===== -->
+      <section class="admin-section active-calls-section">
+        <div class="admin-section-header">
+          <div>
+            <h2 class="admin-heading">🚨 Chamadas das Mesas em Tempo Real (1 a 35)</h2>
+            <p class="admin-subheading">Alerta imediato e sonoro quando um cliente carrega no botão "CHAMAR" no menu.</p>
+          </div>
+          <button class="btn-clear-all" onclick="limparTodasChamadas()">Limpar Todas Atendidas</button>
+        </div>
+
+        <!-- Banner com Chamadas Ativas -->
+        <div class="calls-feed" id="callsFeedContainer">
+          <!-- Injetado dinamicamente via admin.js -->
+          <div class="no-calls-box">
+            <span class="no-calls-icon">✅</span>
+            <h3>Sem chamadas pendentes no momento</h3>
+            <p>Quando uma das 35 mesas carregar no botão redondo de chamada, o alerta com som surgirá aqui imediatamente!</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== GESTÃO DE RESERVAS DOS CLIENTES ===== -->
+      <section class="admin-section reservations-section">
+        <div class="admin-section-header">
+          <div>
+            <h2 class="admin-heading">📋 Gestão de Reservas & Agendamentos</h2>
+            <p class="admin-subheading">Acompanhe quem reservou, confirme no WhatsApp e envie o lembrete de 1 hora antes (IA).</p>
+          </div>
+          
+          <div class="reservations-actions-bar">
+            <input type="text" id="filterReservaInput" placeholder="Procurar por nome, telefone ou data..." class="admin-search-input">
+            <button class="btn-primary-admin" onclick="abrirModalNovaReserva()">+ Nova Reserva Manual</button>
+          </div>
+        </div>
+
+        <div class="reservations-table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Data & Hora</th>
+                <th>Cliente</th>
+                <th>WhatsApp / Telemóvel</th>
+                <th>Pessoas</th>
+                <th>Zona</th>
+                <th>Status</th>
+                <th>Ações de Contacto / IA</th>
+              </tr>
+            </thead>
+            <tbody id="reservasTableBody">
+              <!-- Injetado dinamicamente via admin.js -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===== INFORMAÇÃO & DICAS DO SISTEMA ===== -->
+      <section class="admin-tips-grid">
+        <div class="tip-box">
+          <h4>💬 Como funciona o WhatsApp Imediato</h4>
+          <p>Ao clicar no botão <strong>"📲 Boas-Vindas"</strong>, o WhatsApp Web ou aplicação abrirá diretamente com a mensagem pré-formatada:</p>
+          <div class="code-quote">
+            "Olá [Nome]! Agendamento marcado. Obrigado pelo agendamento, te aguardamos no Costa In Beach Bar! Mais tarde confirmo o agendamento com você!"
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <h4>🤖 Como funciona o Lembrete de 1 Hora Antes (IA)</h4>
+          <p>Ao clicar no botão <strong>"🤖 Lembrete 1h Antes"</strong>, o sistema gera a confirmação personalizada pronta a disparar para o cliente garantir que ele não falta:</p>
+          <div class="code-quote">
+            "Olá [Nome]! A sua reserva no Costa In Beach Bar é dentro de 1 hora (às [Hora]). Gostaria de confirmar se já está a caminho? Responda com SIM para confirmarmos a sua mesa!"
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- MODAL: NOVA RESERVA MANUAL -->
+  <div class="modal-overlay" id="modalNovaReservaManual">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" onclick="fecharModalNovaReserva()">&times;</button>
+      <div class="modal-header-icon">📝</div>
+      <h3 class="modal-title">Registar Reserva Manual (Telefone/Presencial)</h3>
+      <p class="modal-subtitle">Adicione os dados do cliente para registar na agenda do Costa In:</p>
+
+      <form id="formManualReserva">
+        <div class="form-group">
+          <label>Nome do Cliente *</label>
+          <input type="text" id="manNome" required placeholder="Ex: Francisca Silva">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>WhatsApp / Telemóvel *</label>
+            <input type="tel" id="manWhatsapp" required placeholder="+351 912 345 678">
+          </div>
+          <div class="form-group">
+            <label>Email (Opcional)</label>
+            <input type="email" id="manEmail" placeholder="cliente@email.com">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Data *</label>
+            <input type="date" id="manData" required>
+          </div>
+          <div class="form-group">
+            <label>Hora *</label>
+            <input type="time" id="manHora" required value="13:00">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nº de Pessoas *</label>
+            <input type="number" id="manPessoas" min="1" max="50" value="2" required>
+          </div>
+          <div class="form-group">
+            <label>Zona / Mesa</label>
+            <select id="manZona">
+              <option value="Esplanada Vista Mar">Esplanada Vista Mar</option>
+              <option value="Pé na Areia">Pé na Areia</option>
+              <option value="Salão Interior">Salão Interior</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Observações</label>
+          <input type="text" id="manObs" placeholder="Ex: Mesa de canto, aniversário...">
+        </div>
+        <button type="submit" class="btn btn-confirm-call">Salvar Reserva</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="admin.js"></script>
+</body>
+</html>
