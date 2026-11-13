@@ -244,9 +244,14 @@ if (menuSearchInput) {
 }
 
 // =============================================================================
-// 3. SELETOR DE MESAS (1 A 35) & BOTÃO FLUTUANTE "CHAMAR"
+// 3. BOTÃO "CHAMAR GARÇOM" — EXCLUSIVO PARA O QR CODE DA MESA (NÃO NO SITE PÚBLICO)
+// -----------------------------------------------------------------------------
+// O botão redondo flutuante NÃO aparece para visitantes comuns no site público.
+// Ele surge APENAS quando o cliente acede através do QR Code da mesa (ex: ?mesa=15).
 // =============================================================================
 const TOTAL_MESAS = 35;
+const floatingCallContainer = document.getElementById("floatingCallContainer");
+const callBtnText = document.getElementById("callBtnText");
 const tableGridContainer = document.getElementById("tableGridContainer");
 const selectedTableInput = document.getElementById("selectedTableNumber");
 const tableSelectedDisplay = document.getElementById("tableSelectedDisplay");
@@ -256,6 +261,50 @@ const btnCloseCallModal = document.getElementById("btnCloseCallModal");
 const formCallWaiter = document.getElementById("formCallWaiter");
 const callSuccessBox = document.getElementById("callSuccessBox");
 const callSuccessMsg = document.getElementById("callSuccessMsg");
+
+/**
+ * Verifica se a página foi aberta através do QR Code de uma mesa (ex: ?mesa=15).
+ * Se SIM: exibe o botão flutuante redondo de chamada exclusivo para essa mesa.
+ * Se NÃO: mantém o botão completamente oculto para o público em geral.
+ */
+function verificarAcessoMesaQrCode() {
+  const params = new URLSearchParams(window.location.search);
+  const mesaUrl = params.get("mesa");
+
+  if (mesaUrl) {
+    const numMesa = parseInt(mesaUrl, 10);
+    if (!isNaN(numMesa) && numMesa >= 1 && numMesa <= TOTAL_MESAS) {
+      // 1. Torna o botão redondo de chamada visível apenas para esta mesa
+      if (floatingCallContainer) {
+        floatingCallContainer.style.display = "block";
+      }
+      if (callBtnText) {
+        callBtnText.textContent = `M${numMesa}`;
+      }
+      if (selectedTableInput) {
+        selectedTableInput.value = numMesa;
+      }
+      if (tableSelectedDisplay) {
+        tableSelectedDisplay.innerHTML = `Mesa identificada: <strong>MESA ${numMesa}</strong> (via QR Code)`;
+      }
+
+      // 2. Exibe uma barra amigável no topo do site identificando a mesa
+      const topBar = document.querySelector(".top-announcement");
+      if (topBar) {
+        const mesaBadge = document.createElement("div");
+        mesaBadge.style.cssText = "background: #ffb43f; color: #0c2331; font-weight: 800; font-size: 0.8rem; padding: 4px 12px; border-radius: 9999px; display: inline-flex; align-items: center; gap: 6px; margin-left: 10px;";
+        mesaBadge.innerHTML = `📍 Mesa ${numMesa} Ativa`;
+        const container = topBar.querySelector(".announcement-content");
+        if (container) container.appendChild(mesaBadge);
+      }
+    }
+  } else {
+    // Acesso normal pelo site público: garante que o botão não aparece
+    if (floatingCallContainer) {
+      floatingCallContainer.style.display = "none";
+    }
+  }
+}
 
 function gerarBotoesMesa() {
   if (!tableGridContainer) return;
@@ -275,14 +324,13 @@ function gerarBotoesMesa() {
     if (mesaUrl && parseInt(mesaUrl, 10) === i) {
       btn.classList.add("selected");
       selectedTableInput.value = i;
-      tableSelectedDisplay.textContent = `Mesa selecionada: MESA ${i} (via QR Code)`;
     }
 
     btn.addEventListener("click", () => {
       document.querySelectorAll(".table-chip").forEach(c => c.classList.remove("selected"));
       btn.classList.add("selected");
       selectedTableInput.value = i;
-      tableSelectedDisplay.textContent = `Mesa selecionada: MESA ${i}`;
+      tableSelectedDisplay.innerHTML = `Mesa selecionada: <strong>MESA ${i}</strong>`;
     });
 
     tableGridContainer.appendChild(btn);
@@ -557,4 +605,5 @@ if (mobileMenuBtn && mobileDrawer) {
 document.addEventListener("DOMContentLoaded", () => {
   renderizarMenu();
   gerarBotoesMesa();
+  verificarAcessoMesaQrCode(); // Ativa o botão de chamar apenas se estiver num QR Code de mesa
 });

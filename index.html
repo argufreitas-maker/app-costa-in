@@ -571,13 +571,14 @@
   </div>
 
   <!-- =============================================================================
-       BOTÃO FLUTUANTE REDONDO: "CHAMAR GARÇOM" (35 MESAS)
+       BOTÃO FLUTUANTE REDONDO: "CHAMAR GARÇOM"
+       (EXCLUSIVO: Aparece APENAS quando acessado via QR Code da mesa, ex: ?mesa=15)
        ============================================================================= -->
-  <div class="floating-call-container">
+  <div class="floating-call-container" id="floatingCallContainer" style="display: none;">
     <button class="btn-round-call" id="btnOpenCallModal" aria-label="Chamar Garçom">
       <div class="bell-wave"></div>
       <span class="call-icon">🛎️</span>
-      <span class="call-text">CHAMAR</span>
+      <span class="call-text" id="callBtnText">CHAMAR</span>
     </button>
   </div>
 
