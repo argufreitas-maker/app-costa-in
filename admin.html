@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Painel do Gerente | Costa In Beach Bar</title>
+  <title>Painel Intuitivo de Gerência | Costa In Beach Bar</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,37 +30,37 @@
       </div>
 
       <div class="admin-controls-right">
-        <!-- Indicador de Sincronização em Tempo Real -->
+        <!-- Indicador de Conexão em Tempo Real -->
         <div class="live-status-pill">
           <span class="live-dot pulse"></span>
           <span>Tempo Real Ativo</span>
         </div>
 
-        <!-- Alternador de Som do Alarme -->
+        <!-- Alarme Sonoro de Mesa -->
         <button id="btnToggleSound" class="btn-sound-toggle" onclick="toggleAudioAlert()">
           <span id="soundIcon">🔔</span>
           <span id="soundText">Som: Ligado</span>
         </button>
 
-        <!-- Botão Teste Rápido de Mesa -->
+        <!-- Teste Rápido com a Mesa 15 -->
         <button class="btn-test-call" onclick="simularChamadaMesa(15)">
-          ⚡ Simular Mesa 15
+          ⚡ Testar Mesa 15
         </button>
       </div>
     </div>
   </header>
 
-  <!-- ===== CONTEÚDO PRINCIPAL DO ADMIN ===== -->
+  <!-- ===== CONTEÚDO PRINCIPAL INTUITIVO ===== -->
   <main class="admin-main">
     <div class="admin-container">
 
-      <!-- ===== ESTATÍSTICAS RÁPIDAS ===== -->
+      <!-- ===== MÉTRICAS RÁPIDAS NO TOPO ===== -->
       <section class="admin-stats-row">
-        <div class="stat-card stat-alert-card">
+        <div class="stat-card stat-alert-card" id="cardStatChamadas">
           <div class="stat-card-icon">🛎️</div>
           <div class="stat-card-data">
             <span class="stat-card-value" id="countActiveCalls">0</span>
-            <span class="stat-card-title">Chamadas de Mesa Ativas</span>
+            <span class="stat-card-title">Mesas a Chamar Agora</span>
           </div>
         </div>
 
@@ -84,81 +84,117 @@
           <div class="stat-card-icon">🏖️</div>
           <div class="stat-card-data">
             <span class="stat-card-value">35</span>
-            <span class="stat-card-title">Total de Mesas no Local</span>
+            <span class="stat-card-title">Mesas Totais no Local</span>
           </div>
         </div>
       </section>
 
-      <!-- ===== MONITOR DE MESAS CHAMANDO EM TEMPO REAL ===== -->
-      <section class="admin-section active-calls-section">
-        <div class="admin-section-header">
-          <div>
-            <h2 class="admin-heading">🚨 Chamadas das Mesas em Tempo Real (1 a 35)</h2>
-            <p class="admin-subheading">Alerta imediato e sonoro quando um cliente carrega no botão "CHAMAR" no menu.</p>
+      <!-- ===== NAVEGAÇÃO DE ABAS INTUITIVAS DO PAINEL ===== -->
+      <div class="admin-tabs-nav">
+        <button class="admin-tab-btn active" id="tabBtnMesas" onclick="mudarAbaAdmin('mesas')">
+          🛎️ Monitor das 35 Mesas <span class="badge-tab-count" id="badgeTabMesas">0</span>
+        </button>
+        <button class="admin-tab-btn" id="tabBtnReservas" onclick="mudarAbaAdmin('reservas')">
+          📋 Agenda de Reservas <span class="badge-tab-count" id="badgeTabReservas">0</span>
+        </button>
+      </div>
+
+      <!-- =========================================================================
+           ABA 1: MONITOR VISUAL DAS 35 MESAS (FLOOR PLAN & ALERTAS)
+           ========================================================================= -->
+      <section class="admin-tab-content active" id="tabContentMesas">
+        
+        <!-- Alertas de Chamadas Urgentes -->
+        <div class="admin-section urgent-calls-box">
+          <div class="admin-section-header">
+            <div>
+              <h2 class="admin-heading">🚨 Chamadas em Destaque</h2>
+              <p class="admin-subheading">Atenda de imediato aos clientes que solicitaram o empregado de mesa.</p>
+            </div>
+            <button class="btn-clear-all" onclick="limparTodasChamadas()">Limpar Todas Atendidas</button>
           </div>
-          <button class="btn-clear-all" onclick="limparTodasChamadas()">Limpar Todas Atendidas</button>
+
+          <div class="calls-feed" id="callsFeedContainer">
+            <!-- Injetado dinamicamente via admin.js -->
+          </div>
         </div>
 
-        <!-- Banner com Chamadas Ativas -->
-        <div class="calls-feed" id="callsFeedContainer">
-          <!-- Injetado dinamicamente via admin.js -->
-          <div class="no-calls-box">
-            <span class="no-calls-icon">✅</span>
-            <h3>Sem chamadas pendentes no momento</h3>
-            <p>Quando uma das 35 mesas carregar no botão redondo de chamada, o alerta com som surgirá aqui imediatamente!</p>
+        <!-- Mapa Visual das 35 Mesas (Verde = Livre/Tranquilo | Vermelho Pulsante = Chamando) -->
+        <div class="admin-section floorplan-section">
+          <div class="admin-section-header">
+            <div>
+              <h3 class="admin-heading">🗺️ Mapa Visual das 35 Mesas</h3>
+              <p class="admin-subheading">Clique em qualquer mesa em alerta para marcá-la como atendida:</p>
+            </div>
+            <div class="map-legend">
+              <span class="legend-item"><span class="legend-dot dot-normal"></span> Normal</span>
+              <span class="legend-item"><span class="legend-dot dot-calling"></span> A Chamar</span>
+            </div>
+          </div>
+
+          <!-- Grelha com as 35 Mesas do Costa In -->
+          <div class="floorplan-grid" id="floorplanGrid">
+            <!-- 35 blocos interativos gerados via admin.js -->
           </div>
         </div>
+
       </section>
 
-      <!-- ===== GESTÃO DE RESERVAS DOS CLIENTES ===== -->
-      <section class="admin-section reservations-section">
-        <div class="admin-section-header">
-          <div>
-            <h2 class="admin-heading">📋 Gestão de Reservas & Agendamentos</h2>
-            <p class="admin-subheading">Acompanhe quem reservou, confirme no WhatsApp e envie o lembrete de 1 hora antes (IA).</p>
-          </div>
+      <!-- =========================================================================
+           ABA 2: AGENDA DE RESERVAS & DISPARADOR INTELIGENTE NO WHATSAPP
+           ========================================================================= -->
+      <section class="admin-tab-content" id="tabContentReservas">
+        <div class="admin-section">
           
-          <div class="reservations-actions-bar">
-            <input type="text" id="filterReservaInput" placeholder="Procurar por nome, telefone ou data..." class="admin-search-input">
-            <button class="btn-primary-admin" onclick="abrirModalNovaReserva()">+ Nova Reserva Manual</button>
+          <div class="admin-section-header">
+            <div>
+              <h2 class="admin-heading">📋 Reservas dos Clientes</h2>
+              <p class="admin-subheading">Confirme presenças e dispare o lembrete de 1 hora antes para evitar faltas.</p>
+            </div>
+            
+            <div class="reservations-actions-bar">
+              <input type="text" id="filterReservaInput" placeholder="Procurar por nome, telefone ou data..." class="admin-search-input">
+              <button class="btn-primary-admin" onclick="abrirModalNovaReserva()">+ Nova Reserva Manual</button>
+            </div>
           </div>
-        </div>
 
-        <div class="reservations-table-wrapper">
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Data & Hora</th>
-                <th>Cliente</th>
-                <th>WhatsApp / Telemóvel</th>
-                <th>Pessoas</th>
-                <th>Zona</th>
-                <th>Status</th>
-                <th>Ações de Contacto / IA</th>
-              </tr>
-            </thead>
-            <tbody id="reservasTableBody">
-              <!-- Injetado dinamicamente via admin.js -->
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- ===== INFORMAÇÃO & DICAS DO SISTEMA ===== -->
-      <section class="admin-tips-grid">
-        <div class="tip-box">
-          <h4>💬 Como funciona o WhatsApp Imediato</h4>
-          <p>Ao clicar no botão <strong>"📲 Boas-Vindas"</strong>, o WhatsApp Web ou aplicação abrirá diretamente com a mensagem pré-formatada:</p>
-          <div class="code-quote">
-            "Olá [Nome]! Agendamento marcado. Obrigado pelo agendamento, te aguardamos no Costa In Beach Bar! Mais tarde confirmo o agendamento com você!"
+          <div class="reservations-table-wrapper">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Data & Hora</th>
+                  <th>Cliente</th>
+                  <th>WhatsApp / Telemóvel</th>
+                  <th>Pessoas</th>
+                  <th>Zona</th>
+                  <th>Status</th>
+                  <th>Ações no WhatsApp</th>
+                </tr>
+              </thead>
+              <tbody id="reservasTableBody">
+                <!-- Injetado dinamicamente via admin.js -->
+              </tbody>
+            </table>
           </div>
+
         </div>
 
-        <div class="tip-box">
-          <h4>🤖 Como funciona o Lembrete de 1 Hora Antes (IA)</h4>
-          <p>Ao clicar no botão <strong>"🤖 Lembrete 1h Antes"</strong>, o sistema gera a confirmação personalizada pronta a disparar para o cliente garantir que ele não falta:</p>
-          <div class="code-quote">
-            "Olá [Nome]! A sua reserva no Costa In Beach Bar é dentro de 1 hora (às [Hora]). Gostaria de confirmar se já está a caminho? Responda com SIM para confirmarmos a sua mesa!"
+        <!-- Guia de Automação do WhatsApp -->
+        <div class="admin-tips-grid">
+          <div class="tip-box">
+            <h4>💬 1. Mensagem de Boas-Vindas Imediata</h4>
+            <p>Ao carregar no botão <strong>"📲 Boas-Vindas"</strong>, o WhatsApp abre automaticamente com a mensagem combinada pronta a enviar:</p>
+            <div class="code-quote">
+              "Olá [Nome]! Agendamento marcado. Obrigado pelo agendamento, te aguardamos no Costa In Beach Bar! Mais tarde confirmo o agendamento com você!"
+            </div>
+          </div>
+
+          <div class="tip-box">
+            <h4>🤖 2. Lembrete Inteligente de 1 Hora Antes (IA)</h4>
+            <p>Ao carregar no botão <strong>"🤖 Lembrete 1h Antes"</strong>, o sistema dispara a confirmação para evitar mesas reservadas vazias:</p>
+            <div class="code-quote">
+              "Olá [Nome]! A sua reserva é daqui a 1 hora (às [Hora]). A sua mesa já está pronta! Confirme com 'SIM' se já está a caminho!"
+            </div>
           </div>
         </div>
       </section>
@@ -171,8 +207,8 @@
     <div class="modal-dialog">
       <button class="modal-close-btn" onclick="fecharModalNovaReserva()">&times;</button>
       <div class="modal-header-icon">📝</div>
-      <h3 class="modal-title">Registar Reserva Manual (Telefone/Presencial)</h3>
-      <p class="modal-subtitle">Adicione os dados do cliente para registar na agenda do Costa In:</p>
+      <h3 class="modal-title">Registar Reserva Manual</h3>
+      <p class="modal-subtitle">Adicione reservas recebidas por chamada ou presencialmente:</p>
 
       <form id="formManualReserva">
         <div class="form-group">
@@ -205,11 +241,11 @@
             <input type="number" id="manPessoas" min="1" max="50" value="2" required>
           </div>
           <div class="form-group">
-            <label>Zona / Mesa</label>
+            <label>Área / Mesa</label>
             <select id="manZona">
               <option value="Esplanada Vista Mar">Esplanada Vista Mar</option>
               <option value="Pé na Areia">Pé na Areia</option>
-              <option value="Salão Interior">Salão Interior</option>
+              <option value="Interior Acolhedor">Interior Acolhedor</option>
             </select>
           </div>
         </div>

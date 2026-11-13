@@ -6,11 +6,11 @@
 
   <!-- SEO & Metadados -->
   <title>Costa In Beach Bar & Club | Costa da Caparica</title>
-  <meta name="description" content="Com mais de 10 anos de praia na Costa da Caparica, o Costa In Beach Bar é conhecido pela sua culinária maravilhosa, drinks únicos, sunsets inesquecíveis e entregas pelo Uber Eats.">
+  <meta name="description" content="Com mais de 10 anos de praia na Costa da Caparica, o Costa In Beach Bar é conhecido pela sua maravilhosa culinária, drinks únicos, sunsets inesquecíveis e entregas pelo Uber Eats.">
   <meta name="keywords" content="costa in beach bar, costa da caparica restaurante, beach club caparica, reservas costa in, uber eats costa in beach bar">
   <meta name="theme-color" content="#ffb43f">
 
-  <!-- Google Fonts: Playfair Display + Rubik + Plus Jakarta Sans -->
+  <!-- Fontes Oficiais: Playfair Display + Plus Jakarta Sans + Rubik -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -49,12 +49,12 @@
         <a href="#menu-secao">Ementa / Menu</a>
         <a href="#reservas">Reservas</a>
         <a href="#ubereats">Uber Eats</a>
-        <a href="#localizacao">Contactos</a>
+        <a href="#rodape">Contactos & Wi-Fi</a>
       </nav>
 
       <!-- Botões de Ação na Nav -->
       <div class="nav-actions">
-        <a href="#reservas" class="btn btn-primary">Fazer Reserva</a>
+        <a href="#reservas" class="btn btn-primary">Reservar Mesa</a>
         <a href="admin.html" class="btn-admin-link" title="Área de Gerência / Administrador">
           <span class="admin-icon">⚙️</span>
           <span class="admin-label">Admin</span>
@@ -76,7 +76,7 @@
       <a href="#menu-secao" class="mobile-link">Ementa / Menu</a>
       <a href="#reservas" class="mobile-link">Fazer Reserva</a>
       <a href="https://www.ubereats.com/pt-en/store/costa-in-beach-club/j9DAntXeTrCOyTynN_Exfg?srsltid=AYCX9vIeUFoIWbxunwOSEhuOVMgpFiL8JHHTA4WefKUHWAuq8098JEnL" target="_blank" class="mobile-link uber-highlight">🛵 Pedir no Uber Eats</a>
-      <a href="#localizacao" class="mobile-link">Onde Estamos & Wi-Fi</a>
+      <a href="#rodape" class="mobile-link">Localização & Wi-Fi</a>
       <a href="admin.html" class="mobile-link admin-nav-link">⚙️ Painel do Gerente (Admin)</a>
     </div>
   </header>
@@ -94,7 +94,7 @@
       </p>
 
       <div class="hero-buttons">
-        <a href="#reservas" class="btn btn-hero-primary">📅 Reservar a Sua Mesa</a>
+        <a href="#reservas" class="btn btn-hero-primary">📅 Reservar Mesa</a>
         <a href="#menu-secao" class="btn btn-hero-secondary">🍽️ Ver Ementa Digital</a>
         <a href="https://www.ubereats.com/pt-en/store/costa-in-beach-club/j9DAntXeTrCOyTynN_Exfg?srsltid=AYCX9vIeUFoIWbxunwOSEhuOVMgpFiL8JHHTA4WefKUHWAuq8098JEnL" 
            target="_blank" rel="noopener noreferrer" class="btn btn-hero-uber">
@@ -102,7 +102,7 @@
         </a>
       </div>
 
-      <!-- Quick Highlights Bar -->
+      <!-- Métricas em destaque -->
       <div class="hero-stats">
         <div class="stat-item">
           <span class="stat-number">+10</span>
@@ -177,7 +177,7 @@
         </div>
         <div class="about-mini-cards">
           <div class="mini-card">
-            <img src="https://dyj6gt4964deb.cloudfront.net/images/b74eb4ca-c085-456d-945c-a983a25785ca.jpeg" alt="Brunch e Delícias">
+            <img src="https://dyj6gt4964deb.cloudfront.net/images/b74eb4ca-c085-456d-945c-a983a25785ca.jpeg" alt="Brunches e Tostas">
             <span>Brunches & Tostas</span>
           </div>
           <div class="mini-card">
@@ -238,7 +238,7 @@
           <div class="service-info">
             <h3>Esplanada com 35 Mesas & Conforto</h3>
             <p>Espaço amplo e arejado com cerca de 35 mesas preparadas para grupos, amigos e famílias, com vista panorâmica para o oceano.</p>
-            <a href="#reservas" class="service-link">Reservar a Sua Mesa &rarr;</a>
+            <a href="#reservas" class="service-link">Reservar Mesa &rarr;</a>
           </div>
         </article>
 
@@ -275,7 +275,7 @@
         </div>
       </div>
 
-      <!-- Tabs de Categorias (Alinhadas ao cardápio original do Costa In) -->
+      <!-- Tabs de Categorias -->
       <div class="category-scroll-container">
         <div class="category-tabs" id="menuTabs">
           <button class="cat-pill active" data-category="todos">✨ Todos</button>
@@ -324,220 +324,255 @@
     </div>
   </section>
 
-  <!-- ===== FORMULÁRIO DE RESERVAS ===== -->
+  <!-- =============================================================================
+       NOVO PAINEL DE RESERVAS: MAIS SIMPLES, DIRETO E INTUITIVO
+       Passo 1: Seleciona data, horário e pessoas de forma visual.
+       Passo 2: Ao clicar em "Avançar", abre um formulário limpo para Nome, Email e WhatsApp.
+       ============================================================================= -->
   <section class="reservation-section" id="reservas">
     <div class="container">
-      <div class="reservation-wrapper">
-        <div class="reservation-info-col">
-          <span class="section-badge badge-light">GARANTA O SEU LUGAR</span>
-          <h2 class="reservation-title">Faça a Sua Reserva no Costa In</h2>
+      <div class="reservation-simple-wrapper">
+        <div class="reservation-intro text-center">
+          <span class="section-badge badge-light">GARANTA A SUA MESA</span>
+          <h2 class="reservation-title">Faça a Sua Reserva com Vista para o Mar</h2>
           <p class="reservation-desc">
-            Desfrute das nossas 35 mesas privilegiadas com vista para o mar da Costa da Caparica. Seja para um almoço em família, um sunset com amigos ou uma celebração especial, reserve com antecedência e garanta a melhor mesa.
+            Escolha a data e o horário desejados em segundos. A confirmação é instantânea pelo WhatsApp!
           </p>
-
-          <div class="reservation-perks-list">
-            <div class="r-perk">
-              <span class="r-icon">📲</span>
-              <div>
-                <strong>Confirmação Imediata no WhatsApp</strong>
-                <p>Assim que enviar a reserva, recebe a mensagem de confirmação instantânea no seu telemóvel.</p>
-              </div>
-            </div>
-            <div class="r-perk">
-              <span class="r-icon">🤖</span>
-              <div>
-                <strong>Lembrete Inteligente 1h Antes</strong>
-                <p>O nosso agente de atendimento envia-lhe um lembrete no WhatsApp 1 hora antes da sua refeição.</p>
-              </div>
-            </div>
-            <div class="r-perk">
-              <span class="r-icon">🌊</span>
-              <div>
-                <strong>Vista Panorâmica do Atlântico</strong>
-                <p>Lugares confortáveis na esplanada, no salão ou junto à areia.</p>
-              </div>
-            </div>
-          </div>
         </div>
 
-        <div class="reservation-form-col">
-          <form class="reservation-form" id="formReserva">
-            <h3 class="form-title">Preencha os Seus Dados</h3>
-
-            <div class="form-group">
-              <label for="resNome">Nome Completo *</label>
-              <input type="text" id="resNome" required placeholder="Ex: Francisca Silva">
+        <!-- Seletor Rápido e Intuitivo (Passo 1) -->
+        <div class="booking-quick-card">
+          <div class="booking-inputs-grid">
+            
+            <!-- 1. Data -->
+            <div class="booking-field">
+              <label><span class="b-icon">📅</span> Data da Reserva</label>
+              <input type="date" id="quickDate" required>
             </div>
 
-            <div class="form-row">
-              <div class="form-group">
-                <label for="resWhatsapp">WhatsApp / Telemóvel *</label>
-                <input type="tel" id="resWhatsapp" required placeholder="Ex: +351 912 345 678">
-                <small class="field-hint">Receberá a confirmação da reserva neste número.</small>
-              </div>
-              <div class="form-group">
-                <label for="resEmail">Email de Contacto *</label>
-                <input type="email" id="resEmail" required placeholder="francisca@email.com">
-              </div>
+            <!-- 2. Horário -->
+            <div class="booking-field">
+              <label><span class="b-icon">🕒</span> Horário Desejado</label>
+              <select id="quickTime" required>
+                <option value="">Selecione a hora...</option>
+                <option value="12:00">12:00 (Almoço)</option>
+                <option value="12:30">12:30</option>
+                <option value="13:00" selected>13:00</option>
+                <option value="13:30">13:30</option>
+                <option value="14:00">14:00</option>
+                <option value="14:30">14:30</option>
+                <option value="15:00">15:00</option>
+                <option value="17:00">17:00 (Sunset Drinks)</option>
+                <option value="18:00">18:00</option>
+                <option value="19:00">19:00 (Jantar)</option>
+                <option value="19:30">19:30</option>
+                <option value="20:00">20:00</option>
+                <option value="20:30">20:30</option>
+                <option value="21:00">21:00</option>
+              </select>
             </div>
 
-            <div class="form-row">
-              <div class="form-group">
-                <label for="resData">Data Desejada *</label>
-                <input type="date" id="resData" required>
-              </div>
-              <div class="form-group">
-                <label for="resHora">Hora da Reserva *</label>
-                <select id="resHora" required>
-                  <option value="">Selecione o horário...</option>
-                  <option value="12:00">12:00 (Almoço)</option>
-                  <option value="12:30">12:30</option>
-                  <option value="13:00">13:00</option>
-                  <option value="13:30">13:30</option>
-                  <option value="14:00">14:00</option>
-                  <option value="14:30">14:30</option>
-                  <option value="15:00">15:00</option>
-                  <option value="17:00">17:00 (Sunset / Drinks)</option>
-                  <option value="18:00">18:00</option>
-                  <option value="19:00">19:00 (Jantar)</option>
-                  <option value="19:30">19:30</option>
-                  <option value="20:00">20:00</option>
-                  <option value="20:30">20:30</option>
-                  <option value="21:00">21:00</option>
-                </select>
-              </div>
+            <!-- 3. Pessoas -->
+            <div class="booking-field">
+              <label><span class="b-icon">👥</span> Número de Pessoas</label>
+              <select id="quickPeople" required>
+                <option value="1">1 Pessoa</option>
+                <option value="2" selected>2 Pessoas</option>
+                <option value="3">3 Pessoas</option>
+                <option value="4">4 Pessoas</option>
+                <option value="5">5 Pessoas</option>
+                <option value="6">6 Pessoas</option>
+                <option value="7">7 Pessoas</option>
+                <option value="8">8+ Pessoas (Grupo)</option>
+              </select>
             </div>
 
-            <div class="form-row">
-              <div class="form-group">
-                <label for="resPessoas">Número de Pessoas *</label>
-                <select id="resPessoas" required>
-                  <option value="1">1 Pessoa</option>
-                  <option value="2" selected>2 Pessoas</option>
-                  <option value="3">3 Pessoas</option>
-                  <option value="4">4 Pessoas</option>
-                  <option value="5">5 Pessoas</option>
-                  <option value="6">6 Pessoas</option>
-                  <option value="7">7 Pessoas</option>
-                  <option value="8">8+ Pessoas (Grupo)</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="resZona">Preferência de Mesa</label>
-                <select id="resZona">
-                  <option value="Esplanada Vista Mar">Esplanada Vista Mar</option>
-                  <option value="Pé na Areia">Zona Pé na Areia</option>
-                  <option value="Salão Interior">Interior / Acolhedor</option>
-                </select>
-              </div>
+            <!-- 4. Ambiente -->
+            <div class="booking-field">
+              <label><span class="b-icon">🏖️</span> Preferência de Área</label>
+              <select id="quickZone">
+                <option value="Esplanada Vista Mar" selected>Esplanada Vista Mar</option>
+                <option value="Pé na Areia">Pé na Areia</option>
+                <option value="Interior Acolhedor">Interior / Acolhedor</option>
+              </select>
             </div>
 
-            <div class="form-group">
-              <label for="resObs">Observações / Ocasião Especial</label>
-              <textarea id="resObs" rows="2" placeholder="Ex: Aniversário, cadeira de bebé, mesa na sombra..."></textarea>
-            </div>
+          </div>
 
-            <button type="submit" class="btn btn-submit-reserva" id="btnSubmitReserva">
-              <span>📅 Confirmar e Solicitar Reserva</span>
+          <!-- Botão que abre o formulário simples de contacto -->
+          <div class="booking-action-center">
+            <button class="btn btn-advance-booking" id="btnAvancarReserva">
+              <span>Continuar com os Dados de Contacto &rarr;</span>
             </button>
-            <p class="form-footer-notice">
-              Ao reservar, a mensagem de agendamento automático será preparada para envio via WhatsApp com a equipa do Costa In.
+            <p class="booking-guarantee-note">
+              🔒 Sem custos ou pagamento prévio • Confirmação instantânea no WhatsApp
             </p>
-          </form>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== LOCALIZAÇÃO, MAPA & WI-FI ===== -->
-  <section class="location-section" id="localizacao">
-    <div class="container">
-      <div class="location-grid">
-        <div class="location-card">
-          <span class="location-icon">📍</span>
-          <h3>Onde Estamos</h3>
-          <p class="location-address">
-            <strong>Farmacia Chai, Muralha da Praia / Apoio 19</strong><br>
-            Av. Gen. Humberto Delgado Frente<br>
-            2825-337 Costa da Caparica, Portugal
-          </p>
-          <a href="http://maps.google.com/?q=Farmacia Chai, Muralha da Praia /Apoio 19, Av. Gen. Humberto Delgado Frente, 2825-337 Costa da Caparica, Costa da Caparica, Portugal" 
-             target="_blank" rel="noopener noreferrer" class="btn btn-outline-map">
-            Abrir no Google Maps &rarr;
-          </a>
-        </div>
-
-        <div class="location-card wifi-highlight-card">
-          <span class="location-icon">📶</span>
-          <h3>Wi-Fi Gratuito de Clientes</h3>
-          <p>Conecte-se facilmente à nossa rede de alta velocidade na esplanada:</p>
-          <div class="wifi-box">
-            <span class="wifi-label">Rede / Password:</span>
-            <span class="wifi-code" id="wifiPass">costain09</span>
-            <button class="btn-copy-wifi" id="btnCopyWifi" onclick="copiarSenhaWifi()">
-              📋 Copiar Senha
-            </button>
           </div>
-          <span class="wifi-copied-msg" id="wifiCopiedMsg">Senha copiada com sucesso!</span>
         </div>
 
-        <div class="location-card">
-          <span class="location-icon">🕒</span>
-          <h3>Horário de Funcionamento</h3>
-          <ul class="hours-list">
-            <li><span>Segunda a Quinta:</span> <strong>10:00 – 22:00</strong></li>
-            <li><span>Sexta e Sábado:</span> <strong>10:00 – 00:00</strong></li>
-            <li><span>Domingo:</span> <strong>10:00 – 22:30</strong></li>
-            <li class="kitchen-note">Cozinha sempre ativa com petiscos e refeições frescas.</li>
-          </ul>
-        </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== RODAPÉ ===== -->
-  <footer class="footer-main">
-    <div class="container footer-container">
-      <div class="footer-brand">
+  <!-- =============================================================================
+       RODAPÉ UNIFICADO (Juntando Localização, Wi-Fi, Horários e Acesso Admin)
+       ============================================================================= -->
+  <footer class="footer-main" id="rodape">
+    <div class="container footer-grid-unified">
+      
+      <!-- Coluna 1: Marca & Conceito -->
+      <div class="footer-col brand-col">
         <div class="footer-logo">
           <img src="https://dyj6gt4964deb.cloudfront.net/images/1d1ddb83-065b-4f1d-8e0c-fffc8f2f9fbe.jpeg" alt="Costa In Logo" class="footer-logo-img">
           <div>
             <h3>Costa In Beach Bar</h3>
-            <p>Mais de 10 anos de praia e bons momentos na Costa da Caparica.</p>
+            <span class="footer-sub">Beach Bar & Club · Costa da Caparica</span>
           </div>
+        </div>
+        <p class="footer-bio">
+          Há mais de 10 anos a celebrar o Atlântico com culinária autêntica, petiscos frescos, cocktails ao pôr do sol e ambiente descontraído com os pés na areia.
+        </p>
+        <div class="footer-uber-link">
+          <a href="https://www.ubereats.com/pt-en/store/costa-in-beach-club/j9DAntXeTrCOyTynN_Exfg?srsltid=AYCX9vIeUFoIWbxunwOSEhuOVMgpFiL8JHHTA4WefKUHWAuq8098JEnL" target="_blank" class="uber-pill-link">
+            🛵 Peça no Uber Eats
+          </a>
         </div>
       </div>
 
-      <div class="footer-links">
-        <h4>Navegação</h4>
-        <ul>
-          <li><a href="#quem-somos">Quem Somos</a></li>
-          <li><a href="#servicos">Experiências</a></li>
-          <li><a href="#menu-secao">Ementa Digital</a></li>
-          <li><a href="#reservas">Reservas</a></li>
-          <li><a href="https://www.ubereats.com/pt-en/store/costa-in-beach-club/j9DAntXeTrCOyTynN_Exfg?srsltid=AYCX9vIeUFoIWbxunwOSEhuOVMgpFiL8JHHTA4WefKUHWAuq8098JEnL" target="_blank">Uber Eats</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-admin-box">
-        <h4>Acesso de Gerência</h4>
-        <p>Acompanhe chamadas de mesas em tempo real e confirme reservas:</p>
-        <a href="admin.html" class="btn btn-footer-admin">
-          ⚙️ Aceder ao Painel Admin
+      <!-- Coluna 2: Localização & Contactos -->
+      <div class="footer-col location-col">
+        <h4>📍 Localização & Mapa</h4>
+        <p class="footer-address">
+          <strong>Farmacia Chai, Muralha da Praia / Apoio 19</strong><br>
+          Av. Gen. Humberto Delgado Frente<br>
+          2825-337 Costa da Caparica, Portugal
+        </p>
+        <a href="http://maps.google.com/?q=Farmacia Chai, Muralha da Praia /Apoio 19, Av. Gen. Humberto Delgado Frente, 2825-337 Costa da Caparica, Costa da Caparica, Portugal" 
+           target="_blank" rel="noopener noreferrer" class="btn-map-sm">
+          🗺️ Abrir no Google Maps &rarr;
         </a>
       </div>
+
+      <!-- Coluna 3: Wi-Fi Grátis dos Clientes -->
+      <div class="footer-col wifi-col">
+        <h4>📶 Wi-Fi da Esplanada</h4>
+        <p>Aceda gratuitamente à internet enquanto desfruta da sua refeição:</p>
+        <div class="footer-wifi-box">
+          <div class="wifi-info-left">
+            <span class="wifi-tiny-label">Senha / Password:</span>
+            <span class="wifi-display-code" id="wifiPassCode">costain09</span>
+          </div>
+          <button class="btn-copy-wifi-footer" onclick="copiarSenhaWifi()">
+            📋 Copiar
+          </button>
+        </div>
+        <span class="wifi-copied-indicator" id="wifiCopiedMsg">✓ Senha copiada!</span>
+      </div>
+
+      <!-- Coluna 4: Horários & Acesso Admin -->
+      <div class="footer-col hours-admin-col">
+        <h4>🕒 Horário & Gerência</h4>
+        <ul class="footer-hours">
+          <li><span>Seg - Qui:</span> <strong>10:00 – 22:00</strong></li>
+          <li><span>Sex - Sáb:</span> <strong>10:00 – 00:00</strong></li>
+          <li><span>Domingo:</span> <strong>10:00 – 22:30</strong></li>
+        </ul>
+        <div class="footer-admin-card">
+          <a href="admin.html" class="btn-footer-admin-link">
+            ⚙️ Painel do Gerente (Admin)
+          </a>
+        </div>
+      </div>
+
     </div>
-    <div class="footer-bottom">
-      <div class="container footer-bottom-flex">
+
+    <!-- Barra Inferior de Direitos -->
+    <div class="footer-bottom-bar">
+      <div class="container footer-bottom-content">
         <p>© 2026 Costa In Beach Bar & Club. Todos os direitos reservados. Costa da Caparica, Portugal.</p>
-        <span class="made-beach">🌊 Pé na areia, sabor no prato</span>
+        <span class="footer-tagline">🌊 Pé na areia, sabor autêntico e pôr do sol inesquecível</span>
       </div>
     </div>
   </footer>
 
-  <!-- ========================================================
+  <!-- =============================================================================
+       MODAL SIMPLES DE PREENCHIMENTO DE RESERVA (Passo 2)
+       Aparece quando o cliente clica para continuar a reserva!
+       Contém apenas: Nome, Email, WhatsApp e Confirmação.
+       ============================================================================= -->
+  <div class="modal-overlay" id="modalFormularioReserva">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" id="btnCloseReservaModal">&times;</button>
+      
+      <div class="modal-header-icon">📝</div>
+      <h3 class="modal-title">Finalizar a Sua Reserva</h3>
+      <p class="modal-subtitle">Preencha os seus dados de contacto para confirmarmos no WhatsApp:</p>
+
+      <!-- Resumo visual rápido do que ele escolheu -->
+      <div class="booking-mini-summary" id="bookingMiniSummary">
+        <!-- Preenchido via app.js -->
+      </div>
+
+      <form id="formReservaSimples">
+        <div class="form-group">
+          <label for="resNome">Nome Completo *</label>
+          <input type="text" id="resNome" required placeholder="Ex: Francisca Silva">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="resWhatsapp">WhatsApp / Telemóvel *</label>
+            <input type="tel" id="resWhatsapp" required placeholder="+351 912 345 678">
+            <small class="field-hint">Receberá a confirmação da reserva neste número.</small>
+          </div>
+          <div class="form-group">
+            <label for="resEmail">Email *</label>
+            <input type="email" id="resEmail" required placeholder="francisca@email.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="resObs">Observações / Pedido Especial (Opcional)</label>
+          <input type="text" id="resObs" placeholder="Ex: Cadeira de bebé, mesa na sombra, aniversário...">
+        </div>
+
+        <button type="submit" class="btn btn-confirm-call" id="btnSubmitReserva">
+          📅 Confirmar Reserva & Enviar Mensagem
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL DE CONFIRMAÇÃO COM WHATSAPP -->
+  <div class="modal-overlay" id="modalReservaConfirmada">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" onclick="fecharModalReserva()">&times;</button>
+      <div class="modal-header-icon">🎉</div>
+      <h3 class="modal-title">Reserva Confirmada com Sucesso!</h3>
+      <p class="modal-subtitle" id="reservaFeedbackText">
+        O seu pedido foi registado na agenda do Costa In Beach Bar!
+      </p>
+
+      <div class="reserva-summary-box" id="reservaSummaryBox">
+        <!-- Detalhes preenchidos via JS -->
+      </div>
+
+      <div class="whatsapp-prompt-box">
+        <p class="whatsapp-note">
+          📲 Deseja abrir a mensagem de confirmação diretamente no seu WhatsApp para falar com a equipa?
+        </p>
+        <a href="#" id="btnOpenWhatsAppDirect" target="_blank" class="btn btn-whatsapp-direct">
+          💬 Abrir WhatsApp e Enviar
+        </a>
+      </div>
+
+      <button class="btn btn-close-modal-alt" onclick="fecharModalReserva()">Concluir</button>
+    </div>
+  </div>
+
+  <!-- =============================================================================
        BOTÃO FLUTUANTE REDONDO: "CHAMAR GARÇOM" (35 MESAS)
-       ======================================================== -->
+       ============================================================================= -->
   <div class="floating-call-container">
     <button class="btn-round-call" id="btnOpenCallModal" aria-label="Chamar Garçom">
       <div class="bell-wave"></div>
@@ -546,27 +581,27 @@
     </button>
   </div>
 
-  <!-- MODAL: SELETOR DE MESA (1 A 35) & MOTIVO DA CHAMADA -->
+  <!-- MODAL: SELETOR DE MESA (1 A 35) & MOTIVO -->
   <div class="modal-overlay" id="modalCallTable">
     <div class="modal-dialog">
       <button class="modal-close-btn" id="btnCloseCallModal">&times;</button>
       
       <div class="modal-header-icon">🛎️</div>
       <h3 class="modal-title">Chamar Funcionário à Mesa</h3>
-      <p class="modal-subtitle">Indique a sua mesa para a nossa equipa atender de imediato:</p>
+      <p class="modal-subtitle">Indique o número da sua mesa para o atender de imediato:</p>
 
       <form id="formCallWaiter">
         <div class="table-selector-section">
-          <label class="modal-label">Selecione o Número da Sua Mesa (1 a 35):</label>
+          <label class="modal-label">Selecione a Sua Mesa (1 a 35):</label>
           <div class="table-grid" id="tableGridContainer">
-            <!-- Gerado dinamicamente: Botões 1 a 35 -->
+            <!-- Gerado dinamicamente via app.js -->
           </div>
           <input type="hidden" id="selectedTableNumber" value="" required>
           <p class="table-selected-display" id="tableSelectedDisplay">Nenhuma mesa selecionada.</p>
         </div>
 
         <div class="form-group modal-reason-group">
-          <label class="modal-label" for="callReason">Qual é o motivo da chamada?</label>
+          <label class="modal-label" for="callReason">Motivo da chamada:</label>
           <select id="callReason" class="modal-select">
             <option value="Fazer Pedido">🍽️ Fazer novo pedido</option>
             <option value="Pedir a Conta">💳 Pedir a conta</option>
@@ -580,40 +615,13 @@
         </button>
       </form>
 
-      <!-- Mensagem de feedback após chamar -->
+      <!-- Feedback de sucesso -->
       <div class="call-success-box" id="callSuccessBox" style="display: none;">
         <span class="success-checkmark">✅</span>
-        <h4>Chamada Enviada com Sucesso!</h4>
-        <p id="callSuccessMsg">O alerta foi transmitido para o balcão. O nosso empregado de mesa já se dirige à sua mesa.</p>
+        <h4>Chamada Enviada!</h4>
+        <p id="callSuccessMsg">O alerta já está a tocar no balcão. Um funcionário já se dirige até si.</p>
         <button class="btn btn-close-success" onclick="fecharModalChamada()">Entendido</button>
       </div>
-    </div>
-  </div>
-
-  <!-- MODAL DE CONFIRMAÇÃO DE RESERVA / WHATSAPP -->
-  <div class="modal-overlay" id="modalReservaConfirmada">
-    <div class="modal-dialog">
-      <button class="modal-close-btn" onclick="fecharModalReserva()">&times;</button>
-      <div class="modal-header-icon">🎉</div>
-      <h3 class="modal-title">Reserva Solicitada com Sucesso!</h3>
-      <p class="modal-subtitle" id="reservaFeedbackText">
-        Olá! O seu pedido de reserva foi registado e enviado para a nossa equipa.
-      </p>
-
-      <div class="reserva-summary-box" id="reservaSummaryBox">
-        <!-- Detalhes preenchidos via JS -->
-      </div>
-
-      <div class="whatsapp-prompt-box">
-        <p class="whatsapp-note">
-          📲 Deseja abrir a mensagem de agendamento diretamente no seu WhatsApp para confirmar de imediato com o gerente?
-        </p>
-        <a href="#" id="btnOpenWhatsAppDirect" target="_blank" class="btn btn-whatsapp-direct">
-          💬 Abrir WhatsApp e Enviar Mensagem
-        </a>
-      </div>
-
-      <button class="btn btn-close-modal-alt" onclick="fecharModalReserva()">Concluir</button>
     </div>
   </div>
 
