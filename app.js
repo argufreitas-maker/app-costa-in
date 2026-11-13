@@ -1,16 +1,34 @@
-// ============================================================
-// Costa In Beach Bar & Club — app.js (Cliente)
-// ============================================================
+// =============================================================================
+// COSTA IN BEACH BAR & CLUB — APLICAÇÃO PÚBLICA (app.js)
+// -----------------------------------------------------------------------------
+// Este arquivo controla toda a lógica do cliente:
+// 1. Catálogo e ementa digital com filtros e busca reativa
+// 2. Sistema de chamada de garçom para as 35 mesas com alertas em tempo real
+// 3. Sistema de reservas integrado com mensagens automáticas para o WhatsApp
+// 4. Utilitários (cópia de Wi-Fi, menu móvel e modais interativos)
+// =============================================================================
 
-const WHATSAPP_BAR_NUMERO = "351912345678"; // Telemóvel / WhatsApp oficial do Costa In
+/**
+ * CONFIGURAÇÕES GERAIS DO ESTABELECIMENTO
+ * - WHATSAPP_BAR_NUMERO: Número de telefone oficial do balcão/gerente (com código do país).
+ * - UBER_EATS_URL: Link direto da loja oficial do Costa In no Uber Eats Portugal.
+ */
+const WHATSAPP_BAR_NUMERO = "351912345678";
 const UBER_EATS_URL = "https://www.ubereats.com/pt-en/store/costa-in-beach-club/j9DAntXeTrCOyTynN_Exfg?srsltid=AYCX9vIeUFoIWbxunwOSEhuOVMgpFiL8JHHTA4WefKUHWAuq8098JEnL";
 
-// Canal de Comunicação em Tempo Real com o Painel Admin (Mesma máquina/navegador)
+/**
+ * CANAL DE SINCRONIZAÇÃO EM TEMPO REAL (BroadcastChannel API)
+ * Permite que a tela do cliente comunique instantaneamente com a tela do Admin
+ * na mesma rede/navegador sem precisar recarregar ou fazer requisições lentas.
+ */
 const syncChannel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('costa_in_sync') : null;
 
-// ============================================================
-// 1. BASE DE DADOS DO MENU (Alinhada com o Oddmenu Original)
-// ============================================================
+// =============================================================================
+// 1. BASE DE DADOS DO MENU DIGITAL
+// -----------------------------------------------------------------------------
+// Cada item contém identificador único, nome, categoria, preço formatado em Euros,
+// descrição detalhada, imagem oficial hospedada na CDN do CloudFront e tag visual.
+// =============================================================================
 const itensMenu = [
   {
     id: 1,
@@ -149,20 +167,28 @@ const itensMenu = [
   }
 ];
 
-// ============================================================
-// 2. RENDERIZAÇÃO DO MENU & FILTROS
-// ============================================================
+// =============================================================================
+// 2. RENDERIZAÇÃO DA EMENTA & FILTROS DE PESQUISA
+// -----------------------------------------------------------------------------
+// Controla a exibição dinâmica dos pratos com base na categoria ativa e no termo
+// digitado pelo cliente na barra de pesquisa.
+// =============================================================================
 const menuGrid = document.getElementById("menuGrid");
 const menuSearchInput = document.getElementById("menuSearchInput");
 const menuTabs = document.getElementById("menuTabs");
 
+// Estado reativo da interface
 let categoriaAtiva = "todos";
 let termoBusca = "";
 
+/**
+ * Renderiza os pratos filtrados na tela dentro da grelha de produtos.
+ */
 function renderizarMenu() {
   if (!menuGrid) return;
   menuGrid.innerHTML = "";
 
+  // Filtra itens com base na categoria selecionada e texto de busca
   const filtrados = itensMenu.filter(item => {
     const matchCat = categoriaAtiva === "todos" || item.categoria.toLowerCase() === categoriaAtiva.toLowerCase();
     const matchBusca = termoBusca === "" || 
@@ -172,6 +198,7 @@ function renderizarMenu() {
     return matchCat && matchBusca;
   });
 
+  // Caso nenhum item corresponda à busca
   if (filtrados.length === 0) {
     menuGrid.innerHTML = `
       <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">
@@ -183,6 +210,7 @@ function renderizarMenu() {
     return;
   }
 
+  // Gera os cards HTML de cada prato
   filtrados.forEach(item => {
     const card = document.createElement("article");
     card.className = "menu-item-card";
@@ -208,11 +236,14 @@ function renderizarMenu() {
   });
 }
 
+/**
+ * Abre a loja oficial do Costa In no Uber Eats em uma nova aba
+ */
 function abrirUberEatsItem() {
   window.open(UBER_EATS_URL, "_blank");
 }
 
-// Ouvintes de Categoria
+// Ouvinte de clique nas abas de categorias
 if (menuTabs) {
   menuTabs.addEventListener("click", (e) => {
     const pill = e.target.closest(".cat-pill");
@@ -224,7 +255,7 @@ if (menuTabs) {
   });
 }
 
-// Ouvinte de Busca
+// Ouvinte de digitação no campo de pesquisa
 if (menuSearchInput) {
   menuSearchInput.addEventListener("input", (e) => {
     termoBusca = e.target.value.trim().toLowerCase();
@@ -232,9 +263,12 @@ if (menuSearchInput) {
   });
 }
 
-// ============================================================
-// 3. SELETOR DE MESAS (1 A 35) & BOTÃO "CHAMAR GARÇOM"
-// ============================================================
+// =============================================================================
+// 3. SELETOR DE MESAS (1 A 35) & BOTÃO FLUTUANTE "CHAMAR GARÇOM"
+// -----------------------------------------------------------------------------
+// O Costa In possui aproximadamente 35 mesas entre esplanada e areia.
+// Aqui geramos dinamicamente os 35 botões e emitimos o evento de alerta em tempo real.
+// =============================================================================
 const TOTAL_MESAS = 35;
 const tableGridContainer = document.getElementById("tableGridContainer");
 const selectedTableInput = document.getElementById("selectedTableNumber");
@@ -246,10 +280,17 @@ const formCallWaiter = document.getElementById("formCallWaiter");
 const callSuccessBox = document.getElementById("callSuccessBox");
 const callSuccessMsg = document.getElementById("callSuccessMsg");
 
-// Gerar os 35 botões de mesa
+/**
+ * Gera dinamicamente os 35 botões de mesa no modal de chamada
+ * e detecta se o cliente já veio com a mesa pré-selecionada via URL (?mesa=15)
+ */
 function gerarBotoesMesa() {
   if (!tableGridContainer) return;
   tableGridContainer.innerHTML = "";
+
+  // Verifica se há parâmetro "?mesa=X" na URL do QR Code
+  const params = new URLSearchParams(window.location.search);
+  const mesaUrl = params.get("mesa");
 
   for (let i = 1; i <= TOTAL_MESAS; i++) {
     const btn = document.createElement("button");
@@ -259,6 +300,14 @@ function gerarBotoesMesa() {
     btn.title = `Mesa ${i}`;
     btn.dataset.mesa = i;
 
+    // Se a mesa bater com o parâmetro da URL, já deixa selecionada
+    if (mesaUrl && parseInt(mesaUrl, 10) === i) {
+      btn.classList.add("selected");
+      selectedTableInput.value = i;
+      tableSelectedDisplay.textContent = `Mesa selecionada: MESA ${i} (via QR Code)`;
+    }
+
+    // Clique para escolher mesa manualmente
     btn.addEventListener("click", () => {
       document.querySelectorAll(".table-chip").forEach(c => c.classList.remove("selected"));
       btn.classList.add("selected");
@@ -270,7 +319,7 @@ function gerarBotoesMesa() {
   }
 }
 
-// Controlo do Modal de Chamada
+// Abertura do modal de chamada
 if (btnOpenCallModal) {
   btnOpenCallModal.addEventListener("click", () => {
     modalCallTable.style.display = "flex";
@@ -279,6 +328,7 @@ if (btnOpenCallModal) {
   });
 }
 
+// Fechamento do modal de chamada
 if (btnCloseCallModal) {
   btnCloseCallModal.addEventListener("click", () => {
     fecharModalChamada();
@@ -289,7 +339,9 @@ function fecharModalChamada() {
   if (modalCallTable) modalCallTable.style.display = "none";
 }
 
-// Submissão do Alerta de Chamada de Mesa
+/**
+ * Submete o alerta de chamada de garçom para a mesa escolhida
+ */
 if (formCallWaiter) {
   formCallWaiter.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -303,6 +355,7 @@ if (formCallWaiter) {
     const horaAtual = new Date();
     const horaFormatada = horaAtual.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
 
+    // Objeto do alerta com carimbo de data/hora
     const novaChamada = {
       id: 'call_' + Date.now(),
       mesa: mesa,
@@ -312,34 +365,37 @@ if (formCallWaiter) {
       status: 'ativa'
     };
 
-    // 1. Guardar no localStorage
+    // 1. Armazena no localStorage do navegador para persistência
     const chamadasExistentes = JSON.parse(localStorage.getItem('costa_in_chamadas') || '[]');
     chamadasExistentes.unshift(novaChamada);
     localStorage.setItem('costa_in_chamadas', JSON.stringify(chamadasExistentes));
 
-    // 2. Notificar o Admin em Tempo Real via BroadcastChannel e Storage
+    // 2. Emite o evento em tempo real via BroadcastChannel para a tela do Admin
     if (syncChannel) {
       syncChannel.postMessage({ type: 'CHAMADA_MESA', payload: novaChamada });
     }
-    // Disparo forçado para listeners de storage
+    // Disparo complementar para navegadores através do evento 'storage'
     localStorage.setItem('costa_in_sync_ping', JSON.stringify({ event: 'CHAMADA', time: Date.now(), mesa }));
 
-    // 3. Exibir confirmação na tela do cliente
+    // 3. Exibe a tela amigável de sucesso para o cliente
     formCallWaiter.style.display = "none";
     callSuccessBox.style.display = "block";
     callSuccessMsg.innerHTML = `O alerta para a <strong>Mesa ${mesa}</strong> (${motivo}) foi enviado ao balcão! O nosso empregado de mesa já se dirige até si.`;
   });
 }
 
-// ============================================================
-// 4. FORMULÁRIO DE RESERVAS & MENSAGEM WHATSAPP
-// ============================================================
+// =============================================================================
+// 4. FORMULÁRIO DE RESERVAS & INTEGRAÇÃO COM WHATSAPP
+// -----------------------------------------------------------------------------
+// Valida os dados da reserva, salva na base de dados local do restaurante
+// e prepara a mensagem de boas-vindas requisitada pelo cliente.
+// =============================================================================
 const formReserva = document.getElementById("formReserva");
 const modalReservaConfirmada = document.getElementById("modalReservaConfirmada");
 const reservaSummaryBox = document.getElementById("reservaSummaryBox");
 const btnOpenWhatsAppDirect = document.getElementById("btnOpenWhatsAppDirect");
 
-// Preencher data mínima como hoje
+// Impede que o cliente selecione datas no passado
 const resDataInput = document.getElementById("resData");
 if (resDataInput) {
   const hoje = new Date().toISOString().split("T")[0];
@@ -351,6 +407,7 @@ if (formReserva) {
   formReserva.addEventListener("submit", (e) => {
     e.preventDefault();
 
+    // Captura os dados preenchidos no formulário
     const nome = document.getElementById("resNome").value.trim();
     const whatsapp = document.getElementById("resWhatsapp").value.trim();
     const email = document.getElementById("resEmail").value.trim();
@@ -365,11 +422,11 @@ if (formReserva) {
       return;
     }
 
-    // Formatar data para exibição (ex: 15/11/2026)
+    // Formata a data para padrão europeu (DD/MM/AAAA)
     const partesData = data.split("-");
     const dataFormatada = `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
 
-    // Objeto da reserva
+    // Monta o payload estruturado da reserva
     const novaReserva = {
       id: 'res_' + Date.now(),
       nome,
@@ -385,18 +442,18 @@ if (formReserva) {
       criadaEm: new Date().toISOString()
     };
 
-    // Guardar no LocalStorage
+    // 1. Salva a nova reserva no localStorage
     const reservasExistentes = JSON.parse(localStorage.getItem('costa_in_reservas') || '[]');
     reservasExistentes.unshift(novaReserva);
     localStorage.setItem('costa_in_reservas', JSON.stringify(reservasExistentes));
 
-    // Notificar Admin em Tempo Real
+    // 2. Notifica o Admin instantaneamente
     if (syncChannel) {
       syncChannel.postMessage({ type: 'NOVA_RESERVA', payload: novaReserva });
     }
     localStorage.setItem('costa_in_sync_ping', JSON.stringify({ event: 'RESERVA', time: Date.now() }));
 
-    // Montar mensagem solicitada pelo usuário para o WhatsApp:
+    // 3. Monta a mensagem personalizada solicitada para o WhatsApp:
     // "Ola Francisca Agendamento marcado. Obrigado pelo agendamento, te aguardamos! Mais tarde confirmo o agendamento com voce !"
     const textoMensagem = encodeURIComponent(
       `Olá ${nome}! Agendamento marcado.\n` +
@@ -405,10 +462,10 @@ if (formReserva) {
       `Obrigado pelo agendamento, te aguardamos no Costa In Beach Bar! Mais tarde confirmo o agendamento com você!`
     );
 
-    // Link para abrir diretamente no WhatsApp do Bar ou com a mensagem pronta
+    // Link oficial da API do WhatsApp (wa.me)
     const linkWhatsApp = `https://wa.me/${WHATSAPP_BAR_NUMERO}?text=${textoMensagem}`;
 
-    // Preencher modal de confirmação
+    // Preenche o resumo no modal de confirmação
     if (reservaSummaryBox) {
       reservaSummaryBox.innerHTML = `
         <p><strong>👤 Cliente:</strong> ${nome}</p>
@@ -423,7 +480,7 @@ if (formReserva) {
       btnOpenWhatsAppDirect.href = linkWhatsApp;
     }
 
-    // Exibir modal
+    // Exibe o modal na tela
     if (modalReservaConfirmada) {
       modalReservaConfirmada.style.display = "flex";
     }
@@ -432,19 +489,24 @@ if (formReserva) {
   });
 }
 
+/**
+ * Fecha o modal de confirmação de reserva
+ */
 function fecharModalReserva() {
   if (modalReservaConfirmada) modalReservaConfirmada.style.display = "none";
 }
 
-// Fechar modais ao clicar no fundo escuro
+// Fechamento de qualquer modal ao clicar fora da caixa de diálogo
 window.addEventListener("click", (e) => {
   if (e.target === modalCallTable) fecharModalChamada();
   if (e.target === modalReservaConfirmada) fecharModalReserva();
 });
 
-// ============================================================
-// 5. COPIAR SENHA DO WI-FI
-// ============================================================
+// =============================================================================
+// 5. RECURSO INTERATIVO: COPIAR SENHA DO WI-FI
+// -----------------------------------------------------------------------------
+// Permite ao cliente na praia copiar a senha do Wi-Fi oficial ("costain09") com 1 toque.
+// =============================================================================
 function copiarSenhaWifi() {
   const senha = "costain09";
   navigator.clipboard.writeText(senha).then(() => {
@@ -458,9 +520,9 @@ function copiarSenhaWifi() {
   });
 }
 
-// ============================================================
-// 6. MENU MOBILE GAVETA
-// ============================================================
+// =============================================================================
+// 6. MENU RESPONSIVO MOBILE (GAVETA DE NAVEGAÇÃO)
+// =============================================================================
 const mobileMenuBtn = document.getElementById("mobileMenuBtn");
 const mobileDrawer = document.getElementById("mobileDrawer");
 
@@ -469,6 +531,7 @@ if (mobileMenuBtn && mobileDrawer) {
     mobileDrawer.classList.toggle("open");
   });
 
+  // Fecha a gaveta ao clicar em qualquer link
   mobileDrawer.querySelectorAll("a").forEach(link => {
     link.addEventListener("click", () => {
       mobileDrawer.classList.remove("open");
@@ -476,9 +539,9 @@ if (mobileMenuBtn && mobileDrawer) {
   });
 }
 
-// ============================================================
-// 7. INICIALIZAÇÃO
-// ============================================================
+// =============================================================================
+// 7. INICIALIZAÇÃO DA APLICAÇÃO AO CARREGAR A PÁGINA
+// =============================================================================
 document.addEventListener("DOMContentLoaded", () => {
   renderizarMenu();
   gerarBotoesMesa();

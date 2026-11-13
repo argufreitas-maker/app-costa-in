@@ -1,13 +1,29 @@
-// ============================================================
-// Costa In Beach Bar & Club — admin.js (Painel do Gerente)
-// ============================================================
+// =============================================================================
+// COSTA IN BEACH BAR & CLUB — PAINEL DE GERÊNCIA & ADMIN (admin.js)
+// -----------------------------------------------------------------------------
+// Este arquivo controla a inteligência operacional do restaurante:
+// 1. Monitor em tempo real de chamadas de garçom para as 35 mesas
+// 2. Alarme sonoro sintetizado (sino de restaurante via Web Audio API)
+// 3. Gestão completa de reservas com filtros e atualização de status
+// 4. Integração com WhatsApp para disparo de Boas-Vindas e Lembretes de 1h antes
+// 5. Sincronização multi-janela e multi-dispositivo em tempo real
+// =============================================================================
 
+/**
+ * CANAL DE SINCRONIZAÇÃO EM TEMPO REAL (BroadcastChannel API)
+ * Ouve os eventos disparados pelas mesas dos clientes (app.js)
+ */
 const syncChannel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('costa_in_sync') : null;
+
+// Estado do som de alerta no painel administrativo
 let somAtivado = true;
 
-// ============================================================
+// =============================================================================
 // 1. SINTETIZADOR DE SOM DE ALARME (Web Audio API)
-// ============================================================
+// -----------------------------------------------------------------------------
+// Emite um toque harmónico de dois tons (estilo sino de serviço de restaurante)
+// sem necessidade de carregar ficheiros externos de áudio .mp3.
+// =============================================================================
 function tocarAlertaSonoro() {
   if (!somAtivado) return;
   try {
@@ -15,11 +31,11 @@ function tocarAlertaSonoro() {
     if (!AudioContext) return;
     const ctx = new AudioContext();
 
-    // Primeiro tom (Dourado / Agudo)
+    // Primeiro tom: E5 (659.25 Hz) com decaimento suave
     const osc1 = ctx.createOscillator();
     const gain1 = ctx.createGain();
     osc1.type = 'sine';
-    osc1.frequency.setValueAtTime(659.25, ctx.currentTime); // E5
+    osc1.frequency.setValueAtTime(659.25, ctx.currentTime);
     gain1.gain.setValueAtTime(0.3, ctx.currentTime);
     gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
     osc1.connect(gain1);
@@ -27,12 +43,12 @@ function tocarAlertaSonoro() {
     osc1.start();
     osc1.stop(ctx.currentTime + 0.4);
 
-    // Segundo tom (Harmónico)
+    // Segundo tom: A5 (880.00 Hz) para efeito duplo clássico
     setTimeout(() => {
       const osc2 = ctx.createOscillator();
       const gain2 = ctx.createGain();
       osc2.type = 'sine';
-      osc2.frequency.setValueAtTime(880, ctx.currentTime); // A5
+      osc2.frequency.setValueAtTime(880, ctx.currentTime);
       gain2.gain.setValueAtTime(0.35, ctx.currentTime);
       gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
       osc2.connect(gain2);
@@ -42,10 +58,13 @@ function tocarAlertaSonoro() {
     }, 150);
 
   } catch (err) {
-    console.warn("Áudio não disponível ou aguardando interação do utilizador:", err);
+    console.warn("Áudio suspenso aguardando interação do utilizador no navegador:", err);
   }
 }
 
+/**
+ * Alterna entre ligar ou desligar o alarme sonoro
+ */
 function toggleAudioAlert() {
   somAtivado = !somAtivado;
   const icon = document.getElementById("soundIcon");
@@ -53,24 +72,37 @@ function toggleAudioAlert() {
   if (somAtivado) {
     icon.textContent = "🔔";
     text.textContent = "Som: Ligado";
-    tocarAlertaSonoro();
+    tocarAlertaSonoro(); // Toca uma prévia para confirmar que está ativo
   } else {
     icon.textContent = "🔕";
     text.textContent = "Som: Silenciado";
   }
 }
 
-// ============================================================
+// =============================================================================
 // 2. GESTÃO DE CHAMADAS DE MESA (1 A 35)
-// ============================================================
+// -----------------------------------------------------------------------------
+// Monitora quais mesas solicitaram garçom ou a conta, exibe o banner pulsante
+// e permite ao gerente marcar a chamada como atendida.
+// =============================================================================
+
+/**
+ * Lê as chamadas guardadas no localStorage
+ */
 function obterChamadas() {
   return JSON.parse(localStorage.getItem('costa_in_chamadas') || '[]');
 }
 
+/**
+ * Atualiza o localStorage com o estado atualizado das chamadas
+ */
 function salvarChamadas(chamadas) {
   localStorage.setItem('costa_in_chamadas', JSON.stringify(chamadas));
 }
 
+/**
+ * Renderiza o feed visual de chamadas ativas na tela do Admin
+ */
 function renderizarChamadas() {
   const callsFeed = document.getElementById("callsFeedContainer");
   const countDisplay = document.getElementById("countActiveCalls");
@@ -79,10 +111,12 @@ function renderizarChamadas() {
   const todas = obterChamadas();
   const ativas = todas.filter(c => c.status === 'ativa');
 
+  // Atualiza o contador de chamadas pendentes
   if (countDisplay) {
     countDisplay.textContent = ativas.length;
   }
 
+  // Estado vazio: quando todas as mesas estão atendidas
   if (ativas.length === 0) {
     callsFeed.innerHTML = `
       <div class="no-calls-box">
@@ -94,6 +128,7 @@ function renderizarChamadas() {
     return;
   }
 
+  // Limpa o feed e renderiza os banners de cada mesa chamando
   callsFeed.innerHTML = "";
 
   ativas.forEach(chamada => {
@@ -118,6 +153,9 @@ function renderizarChamadas() {
   });
 }
 
+/**
+ * Marca uma mesa específica como atendida e silencia o seu alerta
+ */
 function marcarMesaAtendida(chamadaId) {
   const chamadas = obterChamadas();
   const index = chamadas.findIndex(c => c.id === chamadaId);
@@ -129,6 +167,9 @@ function marcarMesaAtendida(chamadaId) {
   }
 }
 
+/**
+ * Limpa todas as chamadas ativas de uma vez só
+ */
 function limparTodasChamadas() {
   const chamadas = obterChamadas();
   chamadas.forEach(c => c.status = 'atendida');
@@ -136,7 +177,9 @@ function limparTodasChamadas() {
   renderizarChamadas();
 }
 
-// Simular chamada (útil para testes da gerência)
+/**
+ * Função de demonstração/teste para simular uma chamada de mesa instantânea
+ */
 function simularChamadaMesa(numeroMesa = 15) {
   const horaAtual = new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
   const novaChamada = {
@@ -156,11 +199,18 @@ function simularChamadaMesa(numeroMesa = 15) {
   renderizarChamadas();
 }
 
-// ============================================================
-// 3. GESTÃO DE RESERVAS DOS CLIENTES
-// ============================================================
+// =============================================================================
+// 3. GESTÃO DE RESERVAS DOS CLIENTES & DISPARO DE MENSAGENS NO WHATSAPP
+// -----------------------------------------------------------------------------
+// Exibe a tabela de agendamentos, contagem de clientes e botões inteligentes
+// para disparar mensagens formatadas diretamente para o telemóvel do cliente.
+// =============================================================================
+
+/**
+ * Recupera as reservas existentes ou carrega dados iniciais de demonstração
+ */
 function obterReservas() {
-  const padrao = [
+  const dadosIniciais = [
     {
       id: 'res_demo_1',
       nome: 'Francisca Silva',
@@ -193,8 +243,8 @@ function obterReservas() {
 
   const armazenadas = localStorage.getItem('costa_in_reservas');
   if (!armazenadas) {
-    localStorage.setItem('costa_in_reservas', JSON.stringify(padrao));
-    return padrao;
+    localStorage.setItem('costa_in_reservas', JSON.stringify(dadosIniciais));
+    return dadosIniciais;
   }
   return JSON.parse(armazenadas);
 }
@@ -205,6 +255,9 @@ function salvarReservas(reservas) {
 
 let filtroPesquisa = "";
 
+/**
+ * Renderiza as reservas na tabela com filtros e métricas atualizadas
+ */
 function renderizarReservas() {
   const tbody = document.getElementById("reservasTableBody");
   const countToday = document.getElementById("countTodayReservations");
@@ -213,7 +266,7 @@ function renderizarReservas() {
 
   const reservas = obterReservas();
 
-  // Filtragem
+  // Filtragem por texto
   const filtradas = reservas.filter(r => {
     if (!filtroPesquisa) return true;
     const termo = filtroPesquisa.toLowerCase();
@@ -223,7 +276,7 @@ function renderizarReservas() {
            r.hora.includes(termo);
   });
 
-  // Atualizar contadores
+  // Atualiza métricas no topo do painel
   if (countToday) countToday.textContent = reservas.length;
   if (countPeople) {
     const totalPessoas = reservas.reduce((acc, r) => acc + parseInt(r.pessoas || 2, 10), 0);
@@ -243,15 +296,14 @@ function renderizarReservas() {
     return;
   }
 
+  // Gera as linhas da tabela
   filtradas.forEach(res => {
     const tr = document.createElement("tr");
 
-    // Classe de status
     let statusClass = "status-pendente";
     if (res.status === 'Confirmada') statusClass = "status-confirmada";
     if (res.status === 'Cancelada') statusClass = "status-cancelada";
 
-    // Telefone formatado apenas com números
     const telNumeros = (res.whatsapp || "").replace(/\D/g, "");
 
     tr.innerHTML = `
@@ -292,8 +344,10 @@ function renderizarReservas() {
   });
 }
 
-// 1. Mensagem de Boas-Vindas requisitada:
-// "Ola Francisca Agendamento marcado. Obrigado pelo agendamento, te aguardamos! Mais tarde confirmo o agendamento com voce !"
+/**
+ * 1. MENSAGEM DE BOAS-VINDAS IMEDIATA NO WHATSAPP
+ * Requisitada: "Ola Francisca Agendamento marcado. Obrigado pelo agendamento, te aguardamos! Mais tarde confirmo o agendamento com voce !"
+ */
 function enviarMensagemBoasVindas(reservaId) {
   const reservas = obterReservas();
   const res = reservas.find(r => r.id === reservaId);
@@ -309,7 +363,10 @@ function enviarMensagemBoasVindas(reservaId) {
   window.open(`https://wa.me/${telefone}?text=${texto}`, "_blank");
 }
 
-// 2. Mensagem do Agente / IA de 1 hora antes requisitada:
+/**
+ * 2. MENSAGEM DO AGENTE / IA DE 1 HORA ANTES NO WHATSAPP
+ * Dispara lembrete amigável solicitando confirmação de presença do cliente
+ */
 function enviarLembrete1HoraAntes(reservaId) {
   const reservas = obterReservas();
   const res = reservas.find(r => r.id === reservaId);
@@ -326,6 +383,9 @@ function enviarLembrete1HoraAntes(reservaId) {
   window.open(`https://wa.me/${telefone}?text=${texto}`, "_blank");
 }
 
+/**
+ * Alterna o status da reserva entre Pendente e Confirmada
+ */
 function alternarStatusReserva(reservaId) {
   const reservas = obterReservas();
   const res = reservas.find(r => r.id === reservaId);
@@ -341,9 +401,11 @@ function alternarStatusReserva(reservaId) {
   renderizarReservas();
 }
 
-// ============================================================
-// 4. NOVA RESERVA MANUAL
-// ============================================================
+// =============================================================================
+// 4. REGISTO DE NOVA RESERVA MANUAL
+// -----------------------------------------------------------------------------
+// Permite ao gerente registar uma reserva recebida por chamada telefónica ou presencialmente.
+// =============================================================================
 const modalNovaReserva = document.getElementById("modalNovaReservaManual");
 const formManualReserva = document.getElementById("formManualReserva");
 const manDataInput = document.getElementById("manData");
@@ -400,7 +462,7 @@ if (formManualReserva) {
   });
 }
 
-// Filtro de pesquisa
+// Filtro de pesquisa rápida na tabela de reservas
 const filterReservaInput = document.getElementById("filterReservaInput");
 if (filterReservaInput) {
   filterReservaInput.addEventListener("input", (e) => {
@@ -409,12 +471,14 @@ if (filterReservaInput) {
   });
 }
 
-// ============================================================
-// 5. OUVINTE DE SINCRONIZAÇÃO EM TEMPO REAL
-// ============================================================
+// =============================================================================
+// 5. OUVINTES DE SINCRONIZAÇÃO EM TEMPO REAL
+// -----------------------------------------------------------------------------
+// Garante que o painel receba o sinal sonoro e atualize na hora em que o cliente agir
+// =============================================================================
 if (syncChannel) {
   syncChannel.onmessage = (event) => {
-    const { type, payload } = event.data || {};
+    const { type } = event.data || {};
     if (type === 'CHAMADA_MESA') {
       tocarAlertaSonoro();
       renderizarChamadas();
@@ -425,7 +489,7 @@ if (syncChannel) {
   };
 }
 
-// Sincronização via evento 'storage' (suporte multiplas janelas/guias)
+// Sincronização via evento 'storage' para máxima compatibilidade entre abas
 window.addEventListener('storage', (e) => {
   if (e.key === 'costa_in_chamadas' || e.key === 'costa_in_sync_ping') {
     tocarAlertaSonoro();
@@ -436,12 +500,12 @@ window.addEventListener('storage', (e) => {
   }
 });
 
-// Fechar modais ao clicar no fundo
+// Fechar modais ao clicar no fundo escuro
 window.addEventListener('click', (e) => {
   if (e.target === modalNovaReserva) fecharModalNovaReserva();
 });
 
-// Inicialização
+// Inicialização automática ao carregar o painel
 document.addEventListener("DOMContentLoaded", () => {
   renderizarChamadas();
   renderizarReservas();
