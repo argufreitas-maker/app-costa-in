@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Ementa da Mesa | Costa In Beach Bar</title>
+  <meta name="theme-color" content="#957fef">
+
+  <!-- Fontes Oficiais -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-table-qrcode">
+
+  <!-- =========================================================================
+       BARRA DE TOPO MINIMALISTA PARA A MESA (SEM LINKS OU BARRA DE MENU COMPLEXA)
+       Exibe apenas o logo do Costa In e o número da mesa identificada
+       ========================================================================= -->
+  <header class="table-minimal-topbar">
+    <div class="container table-topbar-flex">
+      <div class="table-brand">
+        <img src="https://dyj6gt4964deb.cloudfront.net/images/1d1ddb83-065b-4f1d-8e0c-fffc8f2f9fbe.jpeg" alt="Costa In" class="table-logo-img">
+        <div>
+          <h1 class="table-brand-title">Costa In Beach Bar</h1>
+          <p class="table-brand-sub">Apoio 19 · Costa da Caparica</p>
+        </div>
+      </div>
+
+      <!-- Badge de identificação da mesa (ex: MESA 15) -->
+      <div class="table-active-indicator" id="tableActiveIndicator">
+        <span class="pulse-dot"></span>
+        <span id="topbarTableText">Mesa Ativa</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       APENAS A EMENTA (CATEGORIAS E PRATOS)
+       ========================================================================= -->
+  <main class="menu-section menu-standalone-section">
+    <div class="container">
+
+      <!-- Barra de Pesquisa de Itens -->
+      <div class="menu-search-wrapper">
+        <div class="search-input-box">
+          <span class="search-icon">🔍</span>
+          <input type="search" id="menuSearchInput" placeholder="Procurar prato, bebida ou ingrediente (ex: Choco, Caipirinha, Pizza)...">
+        </div>
+      </div>
+
+      <!-- Tabs de Categorias -->
+      <div class="category-scroll-container">
+        <div class="category-tabs" id="menuTabs">
+          <button class="cat-pill active" data-category="todos">✨ Todos</button>
+          <button class="cat-pill" data-category="Petiscos">🦑 Petiscos & Starters</button>
+          <button class="cat-pill" data-category="Pratos">🐟 Pratos Principais</button>
+          <button class="cat-pill" data-category="Pizzas">🍕 Pizzas</button>
+          <button class="cat-pill" data-category="Burgers">🍔 Burgers & Tostas</button>
+          <button class="cat-pill" data-category="Saladas">🥗 Saladas Frescas</button>
+          <button class="cat-pill" data-category="Pastas">🍝 Pastas</button>
+          <button class="cat-pill" data-category="Bebidas">🍹 Cocktails & Bebidas</button>
+          <button class="cat-pill" data-category="Sobremesas">🍰 Sobremesas</button>
+        </div>
+      </div>
+
+      <!-- Grelha de Pratos -->
+      <div class="menu-grid" id="menuGrid">
+        <!-- Injetado dinamicamente via app.js -->
+      </div>
+
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       ÚNICA COISA QUE FICA EM BAIXO: O RODAPÉ COM WI-FI E INFORMAÇÕES
+       ========================================================================= -->
+  <footer class="footer-main" id="rodape">
+    <div class="container footer-grid-unified">
+      
+      <!-- Coluna 1: Marca -->
+      <div class="footer-col brand-col">
+        <div class="footer-logo">
+          <img src="https://dyj6gt4964deb.cloudfront.net/images/1d1ddb83-065b-4f1d-8e0c-fffc8f2f9fbe.jpeg" alt="Costa In Logo" class="footer-logo-img">
+          <div>
+            <h3>Costa In Beach Bar</h3>
+            <span class="footer-sub">Beach Bar & Club · Costa da Caparica</span>
+          </div>
+        </div>
+        <p class="footer-bio">
+          Obrigado pela sua visita à nossa praia! Bom apetite e aproveite a vista do Atlântico.
+        </p>
+      </div>
+
+      <!-- Coluna 2: Localização -->
+      <div class="footer-col location-col">
+        <h4>📍 Localização</h4>
+        <p class="footer-address">
+          <strong>Farmacia Chai, Muralha da Praia / Apoio 19</strong><br>
+          Av. Gen. Humberto Delgado Frente<br>
+          2825-337 Costa da Caparica, Portugal
+        </p>
+      </div>
+
+      <!-- Coluna 3: Wi-Fi Grátis da Mesa -->
+      <div class="footer-col wifi-col">
+        <h4>📶 Wi-Fi da Esplanada</h4>
+        <p>Internet de alta velocidade gratuita para a sua mesa:</p>
+        <div class="footer-wifi-box">
+          <div class="wifi-info-left">
+            <span class="wifi-tiny-label">Senha / Password:</span>
+            <span class="wifi-display-code" id="wifiPassCode">costain09</span>
+          </div>
+          <button class="btn-copy-wifi-footer" onclick="copiarSenhaWifi()">
+            📋 Copiar
+          </button>
+        </div>
+        <span class="wifi-copied-indicator" id="wifiCopiedMsg">✓ Senha copiada!</span>
+      </div>
+
+      <!-- Coluna 4: Horários -->
+      <div class="footer-col hours-admin-col">
+        <h4>🕒 Horários</h4>
+        <ul class="footer-hours">
+          <li><span>Seg - Qui:</span> <strong>10:00 – 22:00</strong></li>
+          <li><span>Sex - Sáb:</span> <strong>10:00 – 00:00</strong></li>
+          <li><span>Domingo:</span> <strong>10:00 – 22:30</strong></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom-bar">
+      <div class="container footer-bottom-content">
+        <p>© 2026 Costa In Beach Bar & Club. Todos os direitos reservados. Costa da Caparica, Portugal.</p>
+        <span class="footer-tagline">🌊 Pé na areia, sabor autêntico e bons momentos</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       BOTÃO REDONDO FLUTUANTE DE CHAMAR O GARÇOM (SEMPRE ATIVO NESTA PÁGINA)
+       ========================================================================= -->
+  <div class="floating-call-container" id="floatingCallContainer">
+    <button class="btn-round-call" id="btnOpenCallModal" aria-label="Chamar Garçom">
+      <div class="bell-wave"></div>
+      <span class="call-icon">🛎️</span>
+      <span class="call-text" id="callBtnText">CHAMAR</span>
+    </button>
+  </div>
+
+  <!-- MODAL DE CHAMADA À MESA -->
+  <div class="modal-overlay" id="modalCallTable">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" id="btnCloseCallModal">&times;</button>
+      
+      <div class="modal-header-icon">🛎️</div>
+      <h3 class="modal-title" id="callModalTitle">Chamar Funcionário à Mesa</h3>
+      <p class="modal-subtitle" id="callModalSubtitle">A equipa no balcão receberá o alerta sonoro de imediato.</p>
+
+      <form id="formCallWaiter">
+        <!-- Mesa pré-selecionada automaticamente -->
+        <input type="hidden" id="selectedTableNumber" value="15" required>
+        <div class="table-selected-badge-box">
+          <span class="badge-table-large" id="tableSelectedDisplay">Mesa 15</span>
+        </div>
+
+        <div class="form-group modal-reason-group">
+          <label class="modal-label" for="callReason">Qual é o motivo da chamada?</label>
+          <select id="callReason" class="modal-select">
+            <option value="Fazer Pedido">🍽️ Fazer novo pedido</option>
+            <option value="Pedir a Conta">💳 Pedir a conta</option>
+            <option value="Dúvida da Ementa">❓ Dúvida sobre a ementa</option>
+            <option value="Outro Auxílio">🙋 Outro auxílio</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-confirm-call" id="btnConfirmCall">
+          🛎️ Chamar Garçom Agora
+        </button>
+      </form>
+
+      <!-- Feedback de sucesso -->
+      <div class="call-success-box" id="callSuccessBox" style="display: none;">
+        <span class="success-checkmark">✅</span>
+        <h4>Chamada Enviada!</h4>
+        <p id="callSuccessMsg">O alerta já está a tocar no balcão. O empregado de mesa já se dirige até si.</p>
+        <button class="btn btn-close-success" onclick="fecharModalChamada()">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

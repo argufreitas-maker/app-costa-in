@@ -270,33 +270,40 @@ const callSuccessMsg = document.getElementById("callSuccessMsg");
 function verificarAcessoMesaQrCode() {
   const params = new URLSearchParams(window.location.search);
   const mesaUrl = params.get("mesa");
+  const isMesaPage = document.body.classList.contains("page-table-qrcode");
 
-  if (mesaUrl) {
-    const numMesa = parseInt(mesaUrl, 10);
-    if (!isNaN(numMesa) && numMesa >= 1 && numMesa <= TOTAL_MESAS) {
-      // 1. Torna o botão redondo de chamada visível apenas para esta mesa
-      if (floatingCallContainer) {
-        floatingCallContainer.style.display = "block";
-      }
-      if (callBtnText) {
-        callBtnText.textContent = `M${numMesa}`;
-      }
-      if (selectedTableInput) {
-        selectedTableInput.value = numMesa;
-      }
-      if (tableSelectedDisplay) {
-        tableSelectedDisplay.innerHTML = `Mesa identificada: <strong>MESA ${numMesa}</strong> (via QR Code)`;
-      }
+  if (isMesaPage || mesaUrl) {
+    let numMesa = mesaUrl ? parseInt(mesaUrl, 10) : 15;
+    if (isNaN(numMesa) || numMesa < 1 || numMesa > TOTAL_MESAS) {
+      numMesa = 15;
+    }
 
-      // 2. Exibe uma barra amigável no topo do site identificando a mesa
-      const topBar = document.querySelector(".top-announcement");
-      if (topBar) {
-        const mesaBadge = document.createElement("div");
-        mesaBadge.style.cssText = "background: #957fef; color: #ffffff; font-weight: 800; font-size: 0.8rem; padding: 4px 12px; border-radius: 9999px; display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; box-shadow: 0 2px 8px rgba(149, 127, 239, 0.4);";
-        mesaBadge.innerHTML = `📍 Mesa ${numMesa} Ativa`;
-        const container = topBar.querySelector(".announcement-content");
-        if (container) container.appendChild(mesaBadge);
-      }
+    // 1. Torna o botão redondo de chamada visível apenas para esta mesa
+    if (floatingCallContainer) {
+      floatingCallContainer.style.display = "block";
+    }
+    if (callBtnText) {
+      callBtnText.textContent = `M${numMesa}`;
+    }
+    if (selectedTableInput) {
+      selectedTableInput.value = numMesa;
+    }
+    if (tableSelectedDisplay) {
+      tableSelectedDisplay.innerHTML = `Mesa ${numMesa}`;
+    }
+    const topbarTableText = document.getElementById("topbarTableText");
+    if (topbarTableText) {
+      topbarTableText.textContent = `Mesa ${numMesa} Conectada`;
+    }
+
+    // 2. Exibe barra amigável se houver top-announcement
+    const topBar = document.querySelector(".top-announcement");
+    if (topBar) {
+      const mesaBadge = document.createElement("div");
+      mesaBadge.style.cssText = "background: #957fef; color: #ffffff; font-weight: 800; font-size: 0.8rem; padding: 4px 12px; border-radius: 9999px; display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; box-shadow: 0 2px 8px rgba(149, 127, 239, 0.4);";
+      mesaBadge.innerHTML = `📍 Mesa ${numMesa} Ativa`;
+      const container = topBar.querySelector(".announcement-content");
+      if (container) container.appendChild(mesaBadge);
     }
   } else {
     // Acesso normal pelo site público: garante que o botão não aparece
