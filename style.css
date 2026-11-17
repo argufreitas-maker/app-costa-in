@@ -309,18 +309,20 @@ button {
    ============================================================================= */
 .hero {
   position: relative;
-  min-height: 85vh;
+  min-height: 75vh;
   display: flex;
   align-items: center;
-  background: url('https://dyj6gt4964deb.cloudfront.net/images/16230ac9-dcb9-4224-a988-2d61c60b96ae.jpeg') center/cover no-repeat;
+  background: linear-gradient(145deg, #513b56 0%, #3e2844 55%, #2a1a2e 100%);
   color: var(--text-light);
-  padding: 80px 0 60px;
+  padding: 90px 0 70px;
+  overflow: hidden;
 }
 
 .hero-overlay {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(135deg, rgba(81, 59, 86, 0.92) 0%, rgba(62, 44, 66, 0.78) 60%, rgba(149, 127, 239, 0.5) 100%);
+  background: radial-gradient(circle at 50% 25%, rgba(149, 127, 239, 0.28) 0%, rgba(81, 59, 86, 0.1) 70%, transparent 100%);
+  pointer-events: none;
 }
 
 .hero-content {
