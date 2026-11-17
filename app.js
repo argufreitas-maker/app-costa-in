@@ -292,7 +292,7 @@ function verificarAcessoMesaQrCode() {
       const topBar = document.querySelector(".top-announcement");
       if (topBar) {
         const mesaBadge = document.createElement("div");
-        mesaBadge.style.cssText = "background: #ffb43f; color: #0c2331; font-weight: 800; font-size: 0.8rem; padding: 4px 12px; border-radius: 9999px; display: inline-flex; align-items: center; gap: 6px; margin-left: 10px;";
+        mesaBadge.style.cssText = "background: #957fef; color: #ffffff; font-weight: 800; font-size: 0.8rem; padding: 4px 12px; border-radius: 9999px; display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; box-shadow: 0 2px 8px rgba(149, 127, 239, 0.4);";
         mesaBadge.innerHTML = `📍 Mesa ${numMesa} Ativa`;
         const container = topBar.querySelector(".announcement-content");
         if (container) container.appendChild(mesaBadge);
