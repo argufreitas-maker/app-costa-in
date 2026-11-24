@@ -2358,8 +2358,8 @@ section {
     grid-template-columns: repeat(4, 1fr);
   }
   .floating-call-container {
-    bottom: 20px;
-    right: 20px;
+    bottom: 84px;
+    right: 18px;
   }
   .btn-round-call {
     width: 66px;
@@ -2625,4 +2625,659 @@ section {
 .btn-teaser-uber:hover {
   border-color: var(--color-lavender);
   background: var(--color-sand);
+}
+
+
+/* =============================================================================
+   NOVO ESTILO DE LAYOUT MODERNO: COASTAL CHIC EDITORIAL
+   ============================================================================= */
+
+/* Hero Split Layout */
+.hero-split {
+  background: linear-gradient(180deg, var(--color-mint) 0%, rgba(232, 247, 238, 0.4) 50%, #ffffff 100%);
+  padding: 60px 0 80px;
+  min-height: 82vh;
+  display: flex;
+  align-items: center;
+}
+
+.hero-split-container {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 50px;
+  align-items: center;
+}
+
+.hero-location-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid rgba(149, 127, 239, 0.35);
+  color: var(--color-plum);
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  box-shadow: 0 4px 12px rgba(81, 59, 86, 0.06);
+  margin-bottom: 20px;
+}
+
+.hero-split-title {
+  font-family: var(--font-serif);
+  font-size: 3.1rem;
+  font-weight: 800;
+  color: var(--color-plum);
+  line-height: 1.16;
+  margin-bottom: 18px;
+  letter-spacing: -0.5px;
+}
+
+.hero-split-lead {
+  font-size: 1.12rem;
+  line-height: 1.68;
+  color: var(--color-olive);
+  margin-bottom: 32px;
+  max-width: 560px;
+}
+
+.hero-split-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 32px;
+}
+
+.btn-hero-pill-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--color-lavender);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.02rem;
+  padding: 14px 28px;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  box-shadow: 0 6px 20px rgba(149, 127, 239, 0.4);
+  transition: all var(--transition-fast);
+}
+
+.btn-hero-pill-primary:hover {
+  background: #846de6;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(149, 127, 239, 0.55);
+}
+
+.btn-hero-pill-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #ffffff;
+  color: var(--color-plum);
+  font-weight: 700;
+  font-size: 1.02rem;
+  padding: 13px 26px;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--color-lavender);
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  transition: all var(--transition-fast);
+}
+
+.btn-hero-pill-secondary:hover {
+  background: var(--color-mint);
+  transform: translateY(-2px);
+}
+
+.btn-hero-pill-uber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #06c167;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 14px 24px;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(6, 193, 103, 0.35);
+  transition: all var(--transition-fast);
+}
+
+.btn-hero-pill-uber:hover {
+  background: #05a859;
+  transform: translateY(-2px);
+}
+
+.hero-trust-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 14px;
+  border-top: 1px solid rgba(84, 86, 67, 0.15);
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-olive);
+}
+
+.trust-separator {
+  color: rgba(84, 86, 67, 0.3);
+  font-size: 0.8rem;
+}
+
+/* Composição Visual do Hero */
+.hero-card-composition {
+  position: relative;
+  width: 100%;
+}
+
+.hero-main-photo-frame {
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 24px 50px rgba(81, 59, 86, 0.16);
+  border: 4px solid #ffffff;
+}
+
+.hero-composition-img {
+  width: 100%;
+  height: 440px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.hero-composition-img:hover {
+  transform: scale(1.03);
+}
+
+.floating-glass-card {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 18px;
+  box-shadow: 0 16px 36px rgba(81, 59, 86, 0.14);
+  padding: 14px 18px;
+  z-index: 3;
+}
+
+.float-card-top {
+  top: -20px;
+  right: -20px;
+  max-width: 240px;
+}
+
+.float-card-stars {
+  color: #f59e0b;
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+
+.float-card-quote {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-plum);
+  line-height: 1.35;
+  margin-bottom: 4px;
+}
+
+.float-card-author {
+  font-size: 0.72rem;
+  color: var(--color-olive);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.float-card-bottom {
+  bottom: -22px;
+  left: -20px;
+  min-width: 210px;
+}
+
+.float-badge-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-plum);
+  font-size: 0.88rem;
+  margin-bottom: 2px;
+}
+
+.green-live-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+}
+
+.float-sub-info {
+  font-size: 0.76rem;
+  color: var(--color-olive);
+  margin: 0;
+}
+
+/* Secção Quem Somos Modern */
+.about-section-modern {
+  padding: 90px 0;
+  background: #ffffff;
+}
+
+.about-modern-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.badge-modern {
+  background: rgba(149, 127, 239, 0.15);
+  color: var(--color-plum);
+  border: 1px solid rgba(149, 127, 239, 0.3);
+  font-weight: 800;
+  font-size: 0.8rem;
+  letter-spacing: 1.2px;
+  padding: 5px 14px;
+  border-radius: var(--radius-pill);
+  display: inline-block;
+  margin-bottom: 14px;
+}
+
+.title-modern {
+  font-family: var(--font-serif);
+  font-size: 2.35rem;
+  font-weight: 800;
+  color: var(--color-plum);
+  margin-bottom: 18px;
+  line-height: 1.22;
+}
+
+.about-stats-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.stat-card {
+  background: var(--color-mint);
+  border: 1px solid var(--color-sand-border);
+  padding: 16px 14px;
+  border-radius: 16px;
+  text-align: center;
+  transition: transform var(--transition-fast);
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+}
+
+.stat-value {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--color-lavender);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--color-plum);
+}
+
+.about-photo-wrapper {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(81, 59, 86, 0.12);
+}
+
+.about-featured-img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  display: block;
+}
+
+.about-photo-badge {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  border-radius: 14px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+.about-photo-badge strong {
+  font-size: 0.9rem;
+  color: var(--color-plum);
+}
+
+.about-photo-badge p {
+  font-size: 0.76rem;
+  color: var(--color-olive);
+  margin: 0;
+}
+
+/* Secção de Experiências (Modern Bento Grid) */
+.services-section-modern {
+  padding: 90px 0;
+  background: var(--color-sand);
+}
+
+.services-modern-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  margin-top: 40px;
+}
+
+.service-bento-card {
+  background: #ffffff;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(81, 59, 86, 0.08);
+  border: 1px solid var(--color-sand-border);
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+}
+
+.service-bento-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(81, 59, 86, 0.14);
+}
+
+.bento-img-box {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+}
+
+.bento-img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.service-bento-card:hover .bento-img-box img {
+  transform: scale(1.06);
+}
+
+.bento-tag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(81, 59, 86, 0.85);
+  backdrop-filter: blur(6px);
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+}
+
+.bento-content {
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.bento-content h3 {
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: var(--color-plum);
+  margin-bottom: 8px;
+}
+
+.bento-content p {
+  font-size: 0.88rem;
+  color: var(--color-olive);
+  line-height: 1.55;
+  margin-bottom: 18px;
+  flex: 1;
+}
+
+.bento-link {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--color-lavender);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: gap var(--transition-fast);
+}
+
+.bento-link:hover {
+  gap: 8px;
+}
+
+/* Ribbon da Ementa */
+.modern-ribbon {
+  background: linear-gradient(135deg, #ffffff 0%, var(--color-mint) 100%);
+  border: 1px solid var(--color-sand-border);
+  box-shadow: 0 16px 40px rgba(81, 59, 86, 0.08);
+}
+
+.teaser-title {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--color-plum);
+  margin-bottom: 12px;
+}
+
+.teaser-desc {
+  font-size: 1rem;
+  color: var(--color-olive);
+  max-width: 620px;
+  margin: 0 auto 24px;
+}
+
+.teaser-pills-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.t-pill {
+  background: #ffffff;
+  color: var(--color-plum);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 2px 8px rgba(81, 59, 86, 0.06);
+  border: 1px solid var(--color-sand-border);
+}
+
+.teaser-actions-row {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Módulo de Reservas Moderno */
+.reservation-modern {
+  background: #ffffff;
+  padding: 90px 0;
+}
+
+.modern-booking-card {
+  background: #ffffff;
+  border-radius: 26px;
+  box-shadow: 0 20px 50px rgba(81, 59, 86, 0.1);
+  border: 1px solid var(--color-sand-border);
+}
+
+/* =============================================================================
+   BARRA NATIVA INFERIOR PARA IPHONE / MOBILE (iOS BOTTOM BAR)
+   ============================================================================= */
+.ios-bottom-bar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .hero-split {
+    padding: 30px 0 50px;
+    min-height: auto;
+  }
+  
+  .hero-split-container {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .hero-split-title {
+    font-size: 2.3rem;
+  }
+
+  .hero-split-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-hero-pill-primary,
+  .btn-hero-pill-secondary,
+  .btn-hero-pill-uber {
+    width: 100%;
+    text-align: center;
+  }
+
+  .float-card-top {
+    right: 5px;
+    top: -15px;
+  }
+
+  .float-card-bottom {
+    left: 5px;
+    bottom: -15px;
+  }
+
+  .about-modern-grid,
+  .services-modern-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .about-stats-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Exibição da Barra Inferior Nativa do iPhone */
+  .ios-bottom-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(81, 59, 86, 0.1);
+    padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 12px));
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+  }
+
+  .ios-bar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    text-decoration: none;
+    color: var(--color-olive);
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 12px;
+    transition: all var(--transition-fast);
+  }
+
+  .ios-bar-item .ios-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+  .ios-bar-item.active,
+  .ios-bar-item:hover {
+    color: var(--color-lavender);
+  }
+
+  .ios-bar-highlight {
+    background: var(--color-mint);
+    color: var(--color-plum) !important;
+    border: 1px solid var(--color-lavender);
+  }
+
+  .ios-bar-call-btn {
+    background: var(--color-lavender);
+    color: #ffffff !important;
+    border: none;
+    border-radius: 50px;
+    padding: 6px 14px;
+    box-shadow: 0 4px 12px rgba(149, 127, 239, 0.45);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .ios-bar-call-btn:hover {
+    background: #846de6;
+  }
+
+  /* Padding extra no rodapé para não ficar coberto pela barra do iPhone */
+  body.page-home-clean,
+  body.page-menu-public,
+  body.page-table-qrcode {
+    padding-bottom: 74px;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

@@ -3,9 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Ementa Digital | Costa In Beach Bar</title>
-  <meta name="description" content="Consulte a ementa completa do Costa In Beach Bar na Costa da Caparica: petiscos frescos, pratos de peixe e carne, pizzas artesanais, burgers e cocktails.">
+  <title>Ementa Digital | Costa in Beach Bar</title>
+  <meta name="description" content="Consulte a ementa completa do Costa in Beach Bar na Costa da Caparica: petiscos frescos, pratos de peixe e carne, pizzas artesanais, burgers e cocktails.">
   <meta name="theme-color" content="#957fef">
+
+  <!-- PWA & Compatibilidade Nativa iPhone (iOS) -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Costa In">
+  <link rel="apple-touch-icon" href="https://dyj6gt4964deb.cloudfront.net/images/1d1ddb83-065b-4f1d-8e0c-fffc8f2f9fbe.jpeg">
 
   <!-- Fontes Oficiais -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,8 +29,7 @@
       <a href="index.html" class="nav-logo">
         <img src="https://dyj6gt4964deb.cloudfront.net/images/1d1ddb83-065b-4f1d-8e0c-fffc8f2f9fbe.jpeg" alt="Logo Costa In" class="logo-img">
         <div class="logo-text">
-          <span class="brand-title">Costa In</span>
-          <span class="brand-sub">Beach Bar & Club</span>
+          <span class="brand-title">Costa in Beach Bar</span>
         </div>
       </a>
 
@@ -112,15 +118,15 @@
         <div class="footer-logo">
           <img src="https://dyj6gt4964deb.cloudfront.net/images/1d1ddb83-065b-4f1d-8e0c-fffc8f2f9fbe.jpeg" alt="Costa In Logo" class="footer-logo-img">
           <div>
-            <h3>Costa In Beach Bar</h3>
-            <span class="footer-sub">Beach Bar & Club · Costa da Caparica</span>
+            <h3>Costa in Beach Bar</h3>
+            <span class="footer-sub">Apoio 19 · Costa da Caparica</span>
           </div>
         </div>
         <p class="footer-bio">
           Há mais de 10 anos a celebrar o Atlântico com culinária autêntica, petiscos frescos e ambiente descontraído.
         </p>
         <div class="footer-uber-link">
-          <a href="https://www.ubereats.com/pt-en/store/costa-in-beach-club/j9DAntXeTrCOyTynN_Exfg?srsltid=AYCX9vIeUFoIWbxunwOSEhuOVMgpFiL8JHHTA4WefKUHWAuq8098JEnL" target="_blank" class="uber-pill-link">
+          <a href="https://www.ubereats.com/pt-en/store/costa-in-beach-club/j9DAntXeTrCOyTynN_Exfg?srsltid=AYCX9vIeUFoIWbxunwOSEhuOVMgpFp8JHHTA4WefKUHWAuq8098JEnL" target="_blank" class="uber-pill-link">
             🛵 Peça no Uber Eats
           </a>
         </div>
@@ -175,11 +181,94 @@
 
     <div class="footer-bottom-bar">
       <div class="container footer-bottom-content">
-        <p>© 2026 Costa In Beach Bar & Club. Todos os direitos reservados. Costa da Caparica, Portugal.</p>
+        <p>© 2026 Costa in Beach Bar. Todos os direitos reservados. Costa da Caparica, Portugal.</p>
         <span class="footer-tagline">🌊 Pé na areia, sabor autêntico e pôr do sol inesquecível</span>
       </div>
     </div>
   </footer>
+
+  <!-- ===== BARRA NATIVA INFERIOR PARA IPHONE 15 (MOBILE BOTTOM BAR) ===== -->
+  <nav class="ios-bottom-bar" id="iosBottomBar">
+    <a href="index.html#hero" class="ios-bar-item">
+      <span class="ios-icon">🏠</span>
+      <span class="ios-label">Início</span>
+    </a>
+    <a href="menu.html" class="ios-bar-item active">
+      <span class="ios-icon">🍽️</span>
+      <span class="ios-label">Ementa</span>
+    </a>
+    <button type="button" class="ios-bar-item ios-bar-call-btn" id="btnIosCallWaiter" onclick="abrirModalChamada(15)">
+      <span class="ios-icon">🛎️</span>
+      <span class="ios-label">Chamar</span>
+    </button>
+    <a href="index.html#reservas" class="ios-bar-item ios-bar-highlight">
+      <span class="ios-icon">📅</span>
+      <span class="ios-label">Reservar</span>
+    </a>
+    <a href="https://www.ubereats.com/pt-en/store/costa-in-beach-club/j9DAntXeTrCOyTynN_Exfg?srsltid=AYCX9vIeUFoIWbxunwOSEhuOVMgpFp8JHHTA4WefKUHWAuq8098JEnL" target="_blank" class="ios-bar-item">
+      <span class="ios-icon">🛵</span>
+      <span class="ios-label">Uber Eats</span>
+    </a>
+    <a href="admin.html" class="ios-bar-item">
+      <span class="ios-icon">⚙️</span>
+      <span class="ios-label">Admin</span>
+    </a>
+  </nav>
+
+  <!-- =========================================================================
+       BOTÃO REDONDO FLUTUANTE DE CHAMAR O GARÇOM (Ativa alerta no Admin)
+       ========================================================================= -->
+  <div class="floating-call-container" id="floatingCallContainer">
+    <button class="btn-round-call" id="btnOpenCallModal" onclick="abrirModalChamada(15)" aria-label="Chamar Garçom">
+      <div class="bell-wave"></div>
+      <span class="call-icon">🛎️</span>
+      <span class="call-text" id="callBtnText">CHAMAR</span>
+    </button>
+  </div>
+
+  <!-- MODAL DE CHAMADA À MESA (MESAS 1 A 35) -->
+  <div class="modal-overlay" id="modalCallTable">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" id="btnCloseCallModal" onclick="fecharModalChamada()">&times;</button>
+      
+      <div class="modal-header-icon">🛎️</div>
+      <h3 class="modal-title" id="callModalTitle">Chamar Funcionário à Mesa</h3>
+      <p class="modal-subtitle" id="callModalSubtitle">A equipa no balcão receberá o alerta sonoro e visual de imediato no painel de administrador.</p>
+
+      <form id="formCallWaiter">
+        <div class="table-selector-section">
+          <label class="modal-label">Selecione a Sua Mesa (1 a 35):</label>
+          <div class="table-grid" id="tableGridContainer">
+            <!-- Gerado dinamicamente via app.js -->
+          </div>
+          <input type="hidden" id="selectedTableNumber" value="15" required>
+          <p class="table-selected-display" id="tableSelectedDisplay">Mesa selecionada: <strong>MESA 15</strong></p>
+        </div>
+
+        <div class="form-group modal-reason-group">
+          <label class="modal-label" for="callReason">Qual é o motivo da chamada?</label>
+          <select id="callReason" class="modal-select">
+            <option value="Fazer Pedido">🍽️ Fazer novo pedido</option>
+            <option value="Pedir a Conta">💳 Pedir a conta</option>
+            <option value="Dúvida da Ementa">❓ Dúvida sobre a ementa</option>
+            <option value="Outro Auxílio">🙋 Outro auxílio</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-confirm-call" id="btnConfirmCall">
+          🛎️ Chamar Garçom Agora (Ativar Alerta)
+        </button>
+      </form>
+
+      <!-- Feedback de sucesso -->
+      <div class="call-success-box" id="callSuccessBox" style="display: none;">
+        <span class="success-checkmark">✅</span>
+        <h4>Chamada Enviada ao Painel!</h4>
+        <p id="callSuccessMsg">O alerta para a Mesa 15 foi disparado e já está a tocar no painel de administrador!</p>
+        <button type="button" class="btn btn-close-success" onclick="fecharModalChamada()">Entendido</button>
+      </div>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>

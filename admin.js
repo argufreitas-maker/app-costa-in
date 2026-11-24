@@ -472,14 +472,56 @@ if (filterReservaInput) {
 }
 
 // =============================================================================
-// 6. SINCRONIZAÇÃO EM TEMPO REAL
+// 6. SINCRONIZAÇÃO EM TEMPO REAL MULTI-DISPOSITIVOS (Cross-Device Cloud Sync)
 // =============================================================================
+
+function exibirToastAlerta(chamada) {
+  let toastContainer = document.getElementById("adminToastContainer");
+  if (!toastContainer) {
+    toastContainer = document.createElement("div");
+    toastContainer.id = "adminToastContainer";
+    toastContainer.style.cssText = "position: fixed; top: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 12px; max-width: 380px; width: calc(100% - 40px);";
+    document.body.appendChild(toastContainer);
+  }
+
+  const toast = document.createElement("div");
+  toast.style.cssText = "background: #ef4444; color: #ffffff; padding: 16px 20px; border-radius: 16px; box-shadow: 0 12px 30px rgba(239, 68, 68, 0.45); border: 2px solid #ffffff; display: flex; align-items: center; justify-content: space-between; gap: 14px; animation: slideInDown 0.4s ease;";
+  toast.innerHTML = `
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="font-size: 1.8rem;">🛎️</span>
+      <div>
+        <strong style="font-size: 1.1rem; display: block;">MESA ${chamada.mesa} A CHAMAR!</strong>
+        <span style="font-size: 0.85rem; opacity: 0.95;">Motivo: ${chamada.motivo || 'Atendimento'} (${chamada.hora})</span>
+      </div>
+    </div>
+    <button style="background: #ffffff; color: #ef4444; border: none; padding: 8px 14px; border-radius: 999px; font-weight: 800; cursor: pointer; font-size: 0.85rem; white-space: nowrap;">Atender</button>
+  `;
+
+  toast.querySelector("button").onclick = () => {
+    marcarMesaAtendida(chamada.id);
+    toast.remove();
+  };
+
+  toastContainer.appendChild(toast);
+
+  // Remove automaticamente após 12 segundos
+  setTimeout(() => {
+    if (toast.parentNode) {
+      toast.style.opacity = '0';
+      toast.style.transition = 'opacity 0.5s ease';
+      setTimeout(() => toast.remove(), 500);
+    }
+  }, 12000);
+}
+
+// 1. Canal local BroadcastChannel (mesmo navegador, abas diferentes)
 if (syncChannel) {
   syncChannel.onmessage = (event) => {
-    const { type } = event.data || {};
+    const { type, payload } = event.data || {};
     if (type === 'CHAMADA_MESA') {
       tocarAlertaSonoro();
       renderizarChamadas();
+      if (payload) exibirToastAlerta(payload);
     } else if (type === 'NOVA_RESERVA') {
       tocarAlertaSonoro();
       renderizarReservas();
@@ -487,6 +529,7 @@ if (syncChannel) {
   };
 }
 
+// 2. Storage Event (mesmo navegador, páginas locais)
 window.addEventListener('storage', (e) => {
   if (e.key === 'costa_in_chamadas' || e.key === 'costa_in_sync_ping') {
     tocarAlertaSonoro();
@@ -496,6 +539,54 @@ window.addEventListener('storage', (e) => {
     renderizarReservas();
   }
 });
+
+// 3. Nuvem em Tempo Real (Cross-Device: iPhone 15 -> Computador / Tablet)
+try {
+  const cloudStream = new EventSource('https://ntfy.sh/costa_in_beach_bar_sync_caparica/sse');
+  cloudStream.onmessage = (event) => {
+    try {
+      const raw = JSON.parse(event.data);
+      if (raw && raw.message) {
+        const payloadData = typeof raw.message === 'string' ? JSON.parse(raw.message) : raw.message;
+        if (payloadData && payloadData.type === 'CHAMADA_MESA') {
+          const chamada = payloadData.payload;
+          const chamadas = obterChamadas();
+          if (!chamadas.some(c => c.id === chamada.id)) {
+            chamadas.unshift(chamada);
+            salvarChamadas(chamadas);
+            tocarAlertaSonoro();
+            renderizarChamadas();
+            exibirToastAlerta(chamada);
+          }
+        } else if (payloadData && payloadData.type === 'NOVA_RESERVA') {
+          const reserva = payloadData.payload;
+          const reservas = obterReservas();
+          if (!reservas.some(r => r.id === reserva.id)) {
+            reservas.unshift(reserva);
+            salvarReservas(reservas);
+            tocarAlertaSonoro();
+            renderizarReservas();
+          }
+        }
+      }
+    } catch (parseErr) {
+      console.warn("Stream payload parse:", parseErr);
+    }
+  };
+} catch (streamErr) {
+  console.warn("Cloud stream notice:", streamErr);
+}
+
+// Desbloqueia áudio no primeiro toque/clique do utilizador
+window.addEventListener('click', () => {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (AudioContext) {
+      const tempCtx = new AudioContext();
+      if (tempCtx.state === 'suspended') tempCtx.resume();
+    }
+  } catch (e) {}
+}, { once: true });
 
 window.addEventListener('click', (e) => {
   if (e.target === modalNovaReserva) fecharModalNovaReserva();

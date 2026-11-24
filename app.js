@@ -272,44 +272,37 @@ function verificarAcessoMesaQrCode() {
   const mesaUrl = params.get("mesa");
   const isMesaPage = document.body.classList.contains("page-table-qrcode");
 
-  if (isMesaPage || mesaUrl) {
-    let numMesa = mesaUrl ? parseInt(mesaUrl, 10) : 15;
-    if (isNaN(numMesa) || numMesa < 1 || numMesa > TOTAL_MESAS) {
-      numMesa = 15;
-    }
+  let numMesa = mesaUrl ? parseInt(mesaUrl, 10) : 15;
+  if (isNaN(numMesa) || numMesa < 1 || numMesa > TOTAL_MESAS) {
+    numMesa = 15;
+  }
 
-    // 1. Torna o botão redondo de chamada visível apenas para esta mesa
-    if (floatingCallContainer) {
-      floatingCallContainer.style.display = "block";
-    }
-    if (callBtnText) {
-      callBtnText.textContent = `M${numMesa}`;
-    }
-    if (selectedTableInput) {
-      selectedTableInput.value = numMesa;
-    }
-    if (tableSelectedDisplay) {
-      tableSelectedDisplay.innerHTML = `Mesa ${numMesa}`;
-    }
-    const topbarTableText = document.getElementById("topbarTableText");
-    if (topbarTableText) {
-      topbarTableText.textContent = `Mesa ${numMesa} Conectada`;
-    }
+  // O botão redondo flutuante fica SEMPRE disponível para que qualquer cliente/teste possa chamar
+  if (floatingCallContainer) {
+    floatingCallContainer.style.display = "block";
+  }
+  if (callBtnText) {
+    callBtnText.textContent = `M${numMesa}`;
+  }
+  if (selectedTableInput) {
+    selectedTableInput.value = numMesa;
+  }
+  if (tableSelectedDisplay) {
+    tableSelectedDisplay.innerHTML = `Mesa identificada: <strong>MESA ${numMesa}</strong>`;
+  }
+  const topbarTableText = document.getElementById("topbarTableText");
+  if (topbarTableText) {
+    topbarTableText.textContent = `Mesa ${numMesa} Conectada`;
+  }
 
-    // 2. Exibe barra amigável se houver top-announcement
-    const topBar = document.querySelector(".top-announcement");
-    if (topBar) {
-      const mesaBadge = document.createElement("div");
-      mesaBadge.style.cssText = "background: #957fef; color: #ffffff; font-weight: 800; font-size: 0.8rem; padding: 4px 12px; border-radius: 9999px; display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; box-shadow: 0 2px 8px rgba(149, 127, 239, 0.4);";
-      mesaBadge.innerHTML = `📍 Mesa ${numMesa} Ativa`;
-      const container = topBar.querySelector(".announcement-content");
-      if (container) container.appendChild(mesaBadge);
-    }
-  } else {
-    // Acesso normal pelo site público: garante que o botão não aparece
-    if (floatingCallContainer) {
-      floatingCallContainer.style.display = "none";
-    }
+  // Se houver top-announcement no topo:
+  const topBar = document.querySelector(".top-announcement");
+  if (topBar && (isMesaPage || mesaUrl)) {
+    const mesaBadge = document.createElement("div");
+    mesaBadge.style.cssText = "background: #957fef; color: #ffffff; font-weight: 800; font-size: 0.8rem; padding: 4px 12px; border-radius: 9999px; display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; box-shadow: 0 2px 8px rgba(149, 127, 239, 0.4);";
+    mesaBadge.innerHTML = `📍 Mesa ${numMesa} Ativa`;
+    const container = topBar.querySelector(".announcement-content");
+    if (container) container.appendChild(mesaBadge);
   }
 }
 
@@ -319,6 +312,7 @@ function gerarBotoesMesa() {
 
   const params = new URLSearchParams(window.location.search);
   const mesaUrl = params.get("mesa");
+  const defaultMesa = mesaUrl ? parseInt(mesaUrl, 10) : 15;
 
   for (let i = 1; i <= TOTAL_MESAS; i++) {
     const btn = document.createElement("button");
@@ -328,27 +322,55 @@ function gerarBotoesMesa() {
     btn.title = `Mesa ${i}`;
     btn.dataset.mesa = i;
 
-    if (mesaUrl && parseInt(mesaUrl, 10) === i) {
+    if (i === defaultMesa) {
       btn.classList.add("selected");
-      selectedTableInput.value = i;
+      if (selectedTableInput) selectedTableInput.value = i;
     }
 
     btn.addEventListener("click", () => {
       document.querySelectorAll(".table-chip").forEach(c => c.classList.remove("selected"));
       btn.classList.add("selected");
-      selectedTableInput.value = i;
-      tableSelectedDisplay.innerHTML = `Mesa selecionada: <strong>MESA ${i}</strong>`;
+      if (selectedTableInput) selectedTableInput.value = i;
+      if (tableSelectedDisplay) {
+        tableSelectedDisplay.innerHTML = `Mesa selecionada: <strong>MESA ${i}</strong>`;
+      }
     });
 
     tableGridContainer.appendChild(btn);
   }
 }
 
+// Função global para abrir o modal de chamada
+function abrirModalChamada(numMesa = null) {
+  const modal = document.getElementById("modalCallTable");
+  const form = document.getElementById("formCallWaiter");
+  const successBox = document.getElementById("callSuccessBox");
+  const tableInput = document.getElementById("selectedTableNumber");
+  const tableDisplay = document.getElementById("tableSelectedDisplay");
+
+  if (!modal) return;
+
+  const targetMesa = numMesa || (tableInput && tableInput.value) || 15;
+  if (tableInput) tableInput.value = targetMesa;
+  if (tableDisplay) {
+    tableDisplay.innerHTML = `Mesa selecionada: <strong>MESA ${targetMesa}</strong>`;
+  }
+
+  // Destaca a mesa correspondente na grelha se ela existir
+  const chip = document.querySelector(`.table-chip[data-mesa="${targetMesa}"]`);
+  if (chip) {
+    document.querySelectorAll(".table-chip").forEach(c => c.classList.remove("selected"));
+    chip.classList.add("selected");
+  }
+
+  modal.style.display = "flex";
+  if (successBox) successBox.style.display = "none";
+  if (form) form.style.display = "block";
+}
+
 if (btnOpenCallModal) {
   btnOpenCallModal.addEventListener("click", () => {
-    modalCallTable.style.display = "flex";
-    callSuccessBox.style.display = "none";
-    formCallWaiter.style.display = "block";
+    abrirModalChamada();
   });
 }
 
@@ -359,43 +381,78 @@ if (btnCloseCallModal) {
 }
 
 function fecharModalChamada() {
-  if (modalCallTable) modalCallTable.style.display = "none";
+  const modal = document.getElementById("modalCallTable");
+  if (modal) modal.style.display = "none";
 }
 
 if (formCallWaiter) {
   formCallWaiter.addEventListener("submit", (e) => {
     e.preventDefault();
-    const mesa = selectedTableInput.value;
+    const mesa = selectedTableInput ? selectedTableInput.value : 15;
     if (!mesa) {
       alert("Por favor, selecione o número da sua mesa (1 a 35).");
       return;
     }
 
-    const motivo = document.getElementById("callReason").value || "Atendimento";
+    const motivo = document.getElementById("callReason") ? document.getElementById("callReason").value : "Atendimento Geral";
     const horaAtual = new Date();
     const horaFormatada = horaAtual.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
 
     const novaChamada = {
       id: 'call_' + Date.now(),
-      mesa: mesa,
+      mesa: parseInt(mesa, 10),
       motivo: motivo,
       hora: horaFormatada,
       timestamp: Date.now(),
       status: 'ativa'
     };
 
+    // 1. Guarda no localStorage local
     const chamadasExistentes = JSON.parse(localStorage.getItem('costa_in_chamadas') || '[]');
     chamadasExistentes.unshift(novaChamada);
     localStorage.setItem('costa_in_chamadas', JSON.stringify(chamadasExistentes));
 
+    // 2. Dispara no BroadcastChannel (mesmo navegador)
     if (syncChannel) {
       syncChannel.postMessage({ type: 'CHAMADA_MESA', payload: novaChamada });
     }
     localStorage.setItem('costa_in_sync_ping', JSON.stringify({ event: 'CHAMADA', time: Date.now(), mesa }));
 
+    // 3. Dispara em Tempo Real na Nuvem (cross-device: iPhone 15 -> Computador / Tablet)
+    try {
+      fetch('https://ntfy.sh/costa_in_beach_bar_sync_caparica', {
+        method: 'POST',
+        headers: {
+          'Title': `🚨 Chamada da Mesa ${mesa}`,
+          'Priority': 'urgent',
+          'Tags': 'bell,rotating_light'
+        },
+        body: JSON.stringify({ type: 'CHAMADA_MESA', payload: novaChamada })
+      }).catch(() => {});
+    } catch (err) {}
+
+    // 4. Som de confirmação imediata no telemóvel do cliente
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) {
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.frequency.setValueAtTime(659.25, ctx.currentTime);
+        gain.gain.setValueAtTime(0.25, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.35);
+      }
+    } catch (e) {}
+
     formCallWaiter.style.display = "none";
-    callSuccessBox.style.display = "block";
-    callSuccessMsg.innerHTML = `O alerta para a <strong>Mesa ${mesa}</strong> (${motivo}) foi enviado ao balcão! O nosso empregado de mesa já se dirige até si.`;
+    if (callSuccessBox) callSuccessBox.style.display = "block";
+    if (callSuccessMsg) {
+      callSuccessMsg.innerHTML = `O alerta para a <strong>Mesa ${mesa}</strong> (${motivo}) foi disparado com sucesso e já está a tocar no painel de administrador!`;
+    }
   });
 }
 
@@ -613,4 +670,11 @@ document.addEventListener("DOMContentLoaded", () => {
   renderizarMenu();
   gerarBotoesMesa();
   verificarAcessoMesaQrCode(); // Ativa o botão de chamar apenas se estiver num QR Code de mesa
+
+  // Registo do Service Worker para PWA (iPhone / Android)
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => console.log('Costa in Beach Bar: PWA Service Worker ativo'))
+      .catch((err) => console.log('Service Worker aviso:', err));
+  }
 });
