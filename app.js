@@ -282,7 +282,7 @@ function verificarAcessoMesaQrCode() {
     floatingCallContainer.style.display = "block";
   }
   if (callBtnText) {
-    callBtnText.textContent = `M${numMesa}`;
+    callBtnText.textContent = "CALL";
   }
   if (selectedTableInput) {
     selectedTableInput.value = numMesa;

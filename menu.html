@@ -199,7 +199,7 @@
     </a>
     <button type="button" class="ios-bar-item ios-bar-call-btn" id="btnIosCallWaiter" onclick="abrirModalChamada(15)">
       <span class="ios-icon">🛎️</span>
-      <span class="ios-label">Chamar</span>
+      <span class="ios-label">CALL</span>
     </button>
     <a href="index.html#reservas" class="ios-bar-item ios-bar-highlight">
       <span class="ios-icon">📅</span>
@@ -216,13 +216,20 @@
   </nav>
 
   <!-- =========================================================================
-       BOTÃO REDONDO FLUTUANTE DE CHAMAR O GARÇOM (Ativa alerta no Admin)
+       BOTÃO REDONDO FLUTUANTE DE CHAMAR O GARÇOM (Fundo Branco + Ícone Intuitivo + CALL)
        ========================================================================= -->
   <div class="floating-call-container" id="floatingCallContainer">
-    <button class="btn-round-call" id="btnOpenCallModal" onclick="abrirModalChamada(15)" aria-label="Chamar Garçom">
+    <button class="btn-round-call" id="btnOpenCallModal" onclick="abrirModalChamada(15)" aria-label="Call Waiter - Chamar Atendimento">
       <div class="bell-wave"></div>
-      <span class="call-icon">🛎️</span>
-      <span class="call-text" id="callBtnText">CHAMAR</span>
+      <div class="call-icon">
+        <svg viewBox="0 0 32 32" class="svg-service-bell" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="14" y="4" width="4" height="4" rx="1.5" fill="#957fef"/>
+          <path d="M6 22C6 14.268 10.477 9 16 9C21.523 9 26 14.268 26 22H6Z" fill="#513b56"/>
+          <path d="M4 23C4 22.4477 4.44772 22 5 22H27C27.5523 22 28 22.4477 28 23V24C28 25.1046 27.1046 26 26 26H6C4.89543 26 4 25.1046 4 24V23Z" fill="#957fef"/>
+          <path d="M10 17C10.5 13.5 13 11.5 16 11" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.65"/>
+        </svg>
+      </div>
+      <span class="call-text" id="callBtnText">CALL</span>
     </button>
   </div>
 
