@@ -101,6 +101,9 @@
         <button class="admin-tab-btn active" id="tabBtnMesas" onclick="mudarAbaAdmin('mesas')">
           🛎️ Monitor das 35 Mesas <span class="badge-tab-count" id="badgeTabMesas">0</span>
         </button>
+        <button class="admin-tab-btn" id="tabBtnPedidos" onclick="mudarAbaAdmin('pedidos')">
+          🧾 Pedidos & Comandas <span class="badge-tab-count" id="badgeTabPedidos">0</span>
+        </button>
         <button class="admin-tab-btn" id="tabBtnReservas" onclick="mudarAbaAdmin('reservas')">
           📋 Agenda de Reservas <span class="badge-tab-count" id="badgeTabReservas">0</span>
         </button>
@@ -202,6 +205,25 @@
             <div class="code-quote">
               "Olá [Nome]! A sua reserva é daqui a 1 hora (às [Hora]). A sua mesa já está pronta! Confirme com 'SIM' se já está a caminho!"
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================================
+           ABA 3: COMANDAS & PEDIDOS EM TEMPO REAL DAS MESAS (AUTO-ATENDIMENTO)
+           ========================================================================= -->
+      <section class="admin-tab-content" id="tabContentPedidos">
+        <div class="admin-section">
+          <div class="admin-section-header">
+            <div>
+              <h2 class="admin-heading">🧾 Pedidos Recebidos das Mesas</h2>
+              <p class="admin-subheading">Acompanhe os pratos e bebidas pedidos diretamente pelos clientes via QR Code.</p>
+            </div>
+            <button class="btn-clear-all" onclick="limparTodosPedidos()">Limpar Concluídos</button>
+          </div>
+
+          <div id="ordersFeedContainer" class="orders-feed-grid">
+            <!-- Injetado dinamicamente via admin.js -->
           </div>
         </div>
       </section>

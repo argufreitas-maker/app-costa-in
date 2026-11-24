@@ -2,15 +2,16 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Ementa da Mesa | Costa in Beach Bar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>Ementa Digital da Mesa | Costa in Beach Bar</title>
+  <meta name="description" content="Ementa digital interativa da mesa com pedidos diretos e chamada de garçom no Costa in Beach Bar na Costa da Caparica.">
   <meta name="theme-color" content="#957fef">
 
   <!-- PWA & Compatibilidade Nativa iPhone (iOS) -->
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Costa In">
+  <meta name="apple-mobile-web-app-title" content="Costa In Mesa">
   <link rel="apple-touch-icon" href="https://dyj6gt4964deb.cloudfront.net/images/1d1ddb83-065b-4f1d-8e0c-fffc8f2f9fbe.jpeg">
 
   <!-- Fontes Oficiais -->
@@ -18,139 +19,339 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+  <!-- Tailwind CSS via CDN com Configuração Personalizada da Paleta Oficial -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            lavender: '#957fef',
+            'lavender-dark': '#8168ea',
+            'lavender-light': 'rgba(149, 127, 239, 0.15)',
+            mint: '#e8f7ee',
+            'mint-light': '#f3fbf6',
+            plum: '#513b56',
+            'plum-dark': '#3a273e',
+            olive: '#545643',
+            sand: '#fbfbf9',
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          boxShadow: {
+            'glow-lavender': '0 10px 25px -3px rgba(149, 127, 239, 0.45)',
+            'modern-card': '0 10px 30px -4px rgba(81, 59, 86, 0.08)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Estilos complementares (animações de sino e suporte) -->
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Ocultar barra de rolagem horizontal mantendo scroll funcional */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
 </head>
-<body class="page-table-qrcode">
+<body class="bg-slate-50 font-sans text-plum min-h-screen flex flex-col antialiased pb-28">
 
   <!-- =========================================================================
-       BARRA DE TOPO MINIMALISTA PARA A MESA (SEM LINKS OU BARRA DE MENU COMPLEXA)
-       Exibe apenas o logo do Costa In e o número da mesa identificada
+       1. CABEÇALHO MODERNO MINIMALISTA DA MESA (TAILWIND STICKY BAR)
        ========================================================================= -->
-  <header class="table-minimal-topbar">
-    <div class="container table-topbar-flex">
-      <div class="table-brand">
-        <img src="https://dyj6gt4964deb.cloudfront.net/images/1d1ddb83-065b-4f1d-8e0c-fffc8f2f9fbe.jpeg" alt="Costa In" class="table-logo-img">
-        <div>
-          <h1 class="table-brand-title">Costa in Beach Bar</h1>
-          <p class="table-brand-sub">Apoio 19 · Costa da Caparica</p>
-        </div>
+  <header class="bg-white/90 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-40 shadow-sm transition-all">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      
+      <!-- Marca & Mesa -->
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="flex items-center gap-2.5">
+          <img src="https://dyj6gt4964deb.cloudfront.net/images/1d1ddb83-065b-4f1d-8e0c-fffc8f2f9fbe.jpeg" 
+               alt="Costa in Beach Bar" class="w-10 h-10 rounded-full object-cover border-2 border-lavender shadow-sm">
+          <div>
+            <span class="font-serif font-black text-sm text-plum block leading-tight">Costa in Beach Bar</span>
+            <span class="text-[10px] text-olive font-bold uppercase tracking-wider block">Apoio 19 · Caparica</span>
+          </div>
+        </a>
       </div>
 
-      <!-- Badge de identificação da mesa (ex: MESA 15) -->
-      <div class="table-active-indicator" id="tableActiveIndicator">
-        <span class="pulse-dot"></span>
-        <span id="topbarTableText">Mesa Ativa</span>
+      <!-- Indicador da Mesa & Botão do Carrinho -->
+      <div class="flex items-center gap-3">
+        <div class="bg-mint border border-lavender/40 px-3.5 py-1.5 rounded-full flex items-center gap-2 shadow-sm">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span id="topbarTableText" class="text-xs font-black text-plum tracking-wide">Mesa Ativa</span>
+        </div>
+
+        <!-- Botão Rápido de Ver Carrinho no Topo -->
+        <button onclick="abrirCarrinho()" class="relative bg-white hover:bg-slate-100 p-2 rounded-2xl border border-slate-200 shadow-sm transition-colors" title="Abrir Carrinho do Pedido">
+          <span class="text-lg">🛒</span>
+          <span id="navCartCount" class="absolute -top-1.5 -right-1.5 bg-lavender text-white font-black text-[10px] w-5 h-5 rounded-full flex items-center justify-center shadow-sm">0</span>
+        </button>
       </div>
+
     </div>
   </header>
 
   <!-- =========================================================================
-       APENAS A EMENTA (CATEGORIAS E PRATOS)
+       2. BANNER DE BOAS-VINDAS & AUTO-ATENDIMENTO
        ========================================================================= -->
-  <main class="menu-section menu-standalone-section">
-    <div class="container">
-
-      <!-- Barra de Pesquisa de Itens -->
-      <div class="menu-search-wrapper">
-        <div class="search-input-box">
-          <span class="search-icon">🔍</span>
-          <input type="search" id="menuSearchInput" placeholder="Procurar prato, bebida ou ingrediente (ex: Choco, Caipirinha, Pizza)...">
-        </div>
-      </div>
-
-      <!-- Tabs de Categorias -->
-      <div class="category-scroll-container">
-        <div class="category-tabs" id="menuTabs">
-          <button class="cat-pill active" data-category="todos">✨ Todos</button>
-          <button class="cat-pill" data-category="Petiscos">🦑 Petiscos & Starters</button>
-          <button class="cat-pill" data-category="Pratos">🐟 Pratos Principais</button>
-          <button class="cat-pill" data-category="Pizzas">🍕 Pizzas</button>
-          <button class="cat-pill" data-category="Burgers">🍔 Burgers & Tostas</button>
-          <button class="cat-pill" data-category="Saladas">🥗 Saladas Frescas</button>
-          <button class="cat-pill" data-category="Pastas">🍝 Pastas</button>
-          <button class="cat-pill" data-category="Bebidas">🍹 Cocktails & Bebidas</button>
-          <button class="cat-pill" data-category="Sobremesas">🍰 Sobremesas</button>
-        </div>
-      </div>
-
-      <!-- Grelha de Pratos -->
-      <div class="menu-grid" id="menuGrid">
-        <!-- Injetado dinamicamente via app.js -->
-      </div>
-
+  <section class="bg-gradient-to-b from-mint/60 via-slate-50 to-slate-50 pt-7 pb-4 px-4 border-b border-slate-100">
+    <div class="max-w-4xl mx-auto text-center">
+      <span class="inline-block bg-lavender/15 text-plum text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-widest border border-lavender/30 mb-2">
+        🍽️ AUTO-ATENDIMENTO DIGITAL
+      </span>
+      <h1 id="heroTableTitle" class="text-2xl sm:text-3xl font-black font-serif text-plum tracking-tight mb-2">
+        Ementa da Mesa 15
+      </h1>
+      <p class="text-xs sm:text-sm text-olive/90 max-w-lg mx-auto">
+        Escolha os pratos e bebidas que deseja saborear, adicione ao seu carrinho e envie o pedido diretamente para a cozinha e para o bar.
+      </p>
     </div>
+  </section>
+
+  <!-- =========================================================================
+       3. PESQUISA & FILTRO DE CATEGORIAS
+       ========================================================================= -->
+  <main class="max-w-6xl mx-auto px-4 pt-6 flex-1 w-full">
+    
+    <!-- Barra de Pesquisa Moderna -->
+    <div class="relative max-w-xl mx-auto mb-6">
+      <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-400 text-sm">
+        🔍
+      </span>
+      <input type="search" id="menuSearchInput" 
+             placeholder="Procurar prato, bebida ou sobremesa (ex: Choco, Caipirinha, Pizza)..."
+             class="w-full pl-11 pr-4 py-3 bg-white rounded-2xl border border-slate-200/90 shadow-sm focus:ring-2 focus:ring-lavender focus:border-transparent text-sm placeholder-slate-400 outline-none transition-all">
+    </div>
+
+    <!-- Abas de Categorias com Rolagem Horizontal Suave -->
+    <div class="mb-7 overflow-x-auto no-scrollbar py-1">
+      <div class="flex items-center gap-2 min-w-max" id="menuTabs">
+        <button class="cat-pill-tw active bg-lavender text-white px-4 py-2 rounded-full text-xs sm:text-sm font-bold shadow-md shadow-lavender/30 transition-all" data-category="todos">
+          ✨ Todos os Pratos
+        </button>
+        <button class="cat-pill-tw bg-white text-plum border border-slate-200 hover:border-lavender hover:bg-mint/40 px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all shadow-sm" data-category="Petiscos">
+          🦑 Petiscos & Starters
+        </button>
+        <button class="cat-pill-tw bg-white text-plum border border-slate-200 hover:border-lavender hover:bg-mint/40 px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all shadow-sm" data-category="Pratos">
+          🐟 Pratos Principais
+        </button>
+        <button class="cat-pill-tw bg-white text-plum border border-slate-200 hover:border-lavender hover:bg-mint/40 px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all shadow-sm" data-category="Pizzas">
+          🍕 Pizzas Artesanais
+        </button>
+        <button class="cat-pill-tw bg-white text-plum border border-slate-200 hover:border-lavender hover:bg-mint/40 px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all shadow-sm" data-category="Burgers">
+          🍔 Burgers & Tostas
+        </button>
+        <button class="cat-pill-tw bg-white text-plum border border-slate-200 hover:border-lavender hover:bg-mint/40 px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all shadow-sm" data-category="Saladas">
+          🥗 Saladas Frescas
+        </button>
+        <button class="cat-pill-tw bg-white text-plum border border-slate-200 hover:border-lavender hover:bg-mint/40 px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all shadow-sm" data-category="Pastas">
+          🍝 Pastas
+        </button>
+        <button class="cat-pill-tw bg-white text-plum border border-slate-200 hover:border-lavender hover:bg-mint/40 px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all shadow-sm" data-category="Bebidas">
+          🍹 Cocktails & Bebidas
+        </button>
+        <button class="cat-pill-tw bg-white text-plum border border-slate-200 hover:border-lavender hover:bg-mint/40 px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all shadow-sm" data-category="Sobremesas">
+          🍰 Sobremesas
+        </button>
+      </div>
+    </div>
+
+    <!-- Grelha de Produtos Injetada via mesa.js -->
+    <div id="menuGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Injetado dinamicamente -->
+    </div>
+
   </main>
 
   <!-- =========================================================================
-       ÚNICA COISA QUE FICA EM BAIXO: O RODAPÉ COM WI-FI E INFORMAÇÕES
+       4. BARRA FLUTUANTE DE PEDIDO DA MESA (COM SISTEMA DE SOMA)
+       Aparece suavemente assim que o cliente adiciona itens ao carrinho
        ========================================================================= -->
-  <footer class="footer-main" id="rodape">
-    <div class="container footer-grid-unified">
+  <div id="floatingCartBar" class="hidden fixed bottom-6 left-4 right-4 max-w-lg mx-auto bg-plum/95 backdrop-blur-lg text-white p-3.5 sm:p-4 rounded-3xl shadow-2xl z-40 items-center justify-between border border-lavender/40 transition-all duration-300">
+    <div class="flex items-center gap-3">
+      <div class="relative bg-lavender text-white w-11 h-11 rounded-2xl flex items-center justify-center text-xl shadow-md">
+        🛒
+        <span id="cartBadgeCount" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-plum">0</span>
+      </div>
+      <div>
+        <span class="text-[11px] text-slate-300 font-bold block uppercase tracking-wide">Comanda da Mesa</span>
+        <span id="cartTotalBar" class="text-lg font-black text-white font-serif">0.00€</span>
+      </div>
+    </div>
+
+    <button onclick="abrirCarrinho()" class="bg-lavender hover:bg-lavender-dark text-white px-5 py-2.5 rounded-2xl font-black text-sm shadow-md transition-all flex items-center gap-2 active:scale-95">
+      <span>Ver Pedido</span>
+      <span class="text-xs">&rarr;</span>
+    </button>
+  </div>
+
+  <!-- =========================================================================
+       5. GAVETA / DRAWER DO CARRINHO (SLIDE-UP BOTTOM SHEET)
+       ========================================================================= -->
+  <div id="cartDrawerBackdrop" class="hidden fixed inset-0 bg-plum/70 backdrop-blur-sm z-50 transition-opacity" onclick="fecharCarrinho()"></div>
+  
+  <div id="cartDrawer" class="fixed inset-x-0 bottom-0 max-w-xl mx-auto bg-white rounded-t-[32px] shadow-2xl z-50 transform translate-y-full transition-transform duration-300 ease-out flex flex-col max-h-[85vh]">
+    
+    <!-- Puxador & Cabeçalho da Gaveta -->
+    <div class="pt-3 pb-2 px-6 border-b border-slate-100 flex flex-col items-center">
+      <div class="w-12 h-1.5 bg-slate-200 rounded-full mb-3"></div>
+      <div class="w-full flex items-center justify-between">
+        <div>
+          <h3 class="text-xl font-black text-plum font-serif">O Seu Pedido da Mesa</h3>
+          <p class="text-xs text-olive font-semibold">Mesa 15 · Costa in Beach Bar</p>
+        </div>
+        <button onclick="fecharCarrinho()" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-sm transition-colors">
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <!-- Lista de Itens do Pedido com Scroll -->
+    <div class="p-5 overflow-y-auto flex-1" id="cartItemsList">
       
-      <!-- Coluna 1: Marca -->
-      <div class="footer-col brand-col">
-        <div class="footer-logo">
-          <img src="https://dyj6gt4964deb.cloudfront.net/images/1d1ddb83-065b-4f1d-8e0c-fffc8f2f9fbe.jpeg" alt="Costa In Logo" class="footer-logo-img">
-          <div>
-            <h3>Costa in Beach Bar</h3>
-            <span class="footer-sub">Apoio 19 · Costa da Caparica</span>
-          </div>
-        </div>
-        <p class="footer-bio">
-          Obrigado pela sua visita à nossa praia! Bom apetite e aproveite a vista do Atlântico.
-        </p>
+      <!-- Estado Vazio -->
+      <div id="cartEmptyState" class="text-center py-12 hidden">
+        <span class="text-5xl block mb-3">🛒</span>
+        <h4 class="text-base font-bold text-plum font-serif mb-1">O seu carrinho está vazio</h4>
+        <p class="text-xs text-olive">Escolha deliciosos pratos ou cocktails na ementa para adicionar ao pedido.</p>
       </div>
 
-      <!-- Coluna 2: Localização -->
-      <div class="footer-col location-col">
-        <h4>📍 Localização</h4>
-        <p class="footer-address">
-          <strong>Farmacia Chai, Muralha da Praia / Apoio 19</strong><br>
-          Av. Gen. Humberto Delgado Frente<br>
-          2825-337 Costa da Caparica, Portugal
-        </p>
-      </div>
+      <!-- Container Dinâmico -->
+      <div id="cartItemsContainer"></div>
 
-      <!-- Coluna 3: Wi-Fi Grátis da Mesa -->
-      <div class="footer-col wifi-col">
-        <h4>📶 Wi-Fi da Esplanada</h4>
-        <p>Internet de alta velocidade gratuita para a sua mesa:</p>
-        <div class="footer-wifi-box">
-          <div class="wifi-info-left">
-            <span class="wifi-tiny-label">Senha / Password:</span>
-            <span class="wifi-display-code" id="wifiPassCode">costain09</span>
-          </div>
-          <button class="btn-copy-wifi-footer" onclick="copiarSenhaWifi()">
-            📋 Copiar
-          </button>
-        </div>
-        <span class="wifi-copied-indicator" id="wifiCopiedMsg">✓ Senha copiada!</span>
-      </div>
-
-      <!-- Coluna 4: Horários -->
-      <div class="footer-col hours-admin-col">
-        <h4>🕒 Horários</h4>
-        <ul class="footer-hours">
-          <li><span>Seg - Qui:</span> <strong>10:00 – 22:00</strong></li>
-          <li><span>Sex - Sáb:</span> <strong>10:00 – 00:00</strong></li>
-          <li><span>Domingo:</span> <strong>10:00 – 22:30</strong></li>
-        </ul>
+      <!-- Observações para a Cozinha -->
+      <div class="mt-4 pt-3 border-t border-slate-100">
+        <label for="cartObservations" class="block text-xs font-bold text-plum mb-1.5 flex items-center gap-1.5">
+          <span>📝</span>
+          <span>Observações para a Cozinha / Bar (Opcional):</span>
+        </label>
+        <textarea id="cartObservations" rows="2" 
+                  placeholder="Ex: sem cebola na salada, caipirinha com pouco açúcar, carne mal passada..."
+                  class="w-full p-3 text-xs bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-lavender text-plum resize-none"></textarea>
       </div>
 
     </div>
 
-    <div class="footer-bottom-bar">
-      <div class="container footer-bottom-content">
-        <p>© 2026 Costa in Beach Bar. Todos os direitos reservados. Costa da Caparica, Portugal.</p>
-        <span class="footer-tagline">🌊 Pé na areia, sabor autêntico e bons momentos</span>
+    <!-- Bloco de Soma & Botão de Envio (Fixo no Rodapé do Carrinho) -->
+    <div class="p-5 bg-slate-50 border-t border-slate-200/80 rounded-b-none">
+      
+      <!-- Resumo dos Valores -->
+      <div class="space-y-1.5 mb-4 text-xs font-medium">
+        <div class="flex justify-between text-slate-500">
+          <span>Subtotal dos Itens:</span>
+          <span id="cartDrawerSubtotal" class="font-bold text-plum">0.00€</span>
+        </div>
+        <div class="flex justify-between text-slate-500">
+          <span>IVA e Serviço da Esplanada:</span>
+          <span class="text-emerald-600 font-bold">Incluído</span>
+        </div>
+        <div class="flex justify-between text-base font-black text-plum pt-2 border-t border-slate-200">
+          <span class="font-serif">Total a Pagar:</span>
+          <span id="cartDrawerTotal" class="text-xl text-lavender font-serif">0.00€</span>
+        </div>
       </div>
+
+      <!-- Botão de Enviar Pedido -->
+      <button id="btnEnviarPedido" onclick="enviarPedidoMesa()" class="w-full bg-lavender hover:bg-lavender-dark text-white font-extrabold py-3.5 px-6 rounded-2xl shadow-lg shadow-lavender/30 transition-all flex items-center justify-center gap-2 active:scale-98 disabled:opacity-50 disabled:pointer-events-none">
+        <span class="text-lg">🚀</span>
+        <span>Confirmar e Enviar Pedido para o Balcão</span>
+      </button>
+
+      <p class="text-[11px] text-center text-slate-400 mt-2.5">
+        🔒 O pedido toca diretamente na impressora / ecrã do balcão. O pagamento é feito no final da refeição.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- =========================================================================
+       6. MODAL DE SUCESSO: PEDIDO RECEBIDO PELO BALCÃO
+       ========================================================================= -->
+  <div id="orderSuccessModal" class="hidden fixed inset-0 bg-plum/75 backdrop-blur-sm z-50 items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 text-center shadow-2xl border border-slate-100 animate-slide-up">
+      <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-3 shadow-inner">
+        ✓
+      </div>
+      <h3 class="text-2xl font-black font-serif text-plum mb-1">Pedido Enviado com Sucesso!</h3>
+      <p class="text-xs text-olive mb-4">
+        A comanda já está a tocar no balcão e na cozinha do Costa in Beach Bar. A nossa equipa já está a preparar tudo com ingredientes frescos!
+      </p>
+
+      <div id="orderSuccessSummary"></div>
+
+      <div class="bg-mint/70 border border-lavender/30 p-3 rounded-2xl text-xs text-plum font-semibold mb-4 text-left flex items-start gap-2.5">
+        <span class="text-base">🛎️</span>
+        <p>Precisa de algo mais? Pode usar o botão flutuante <strong>CALL</strong> a qualquer instante para chamar o funcionário até à sua mesa.</p>
+      </div>
+
+      <button onclick="fecharModalSucessoPedido()" class="w-full bg-lavender hover:bg-lavender-dark text-white font-bold py-3 px-6 rounded-2xl shadow-md transition-all">
+        Entendido, Obrigado!
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       7. RODAPÉ UNIFICADO COM WI-FI E INFORMAÇÕES
+       ========================================================================= -->
+  <footer class="mt-auto bg-white border-t border-slate-200/80 pt-10 pb-8 px-4">
+    <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+      
+      <!-- Marca -->
+      <div>
+        <div class="flex items-center gap-3 mb-3">
+          <img src="https://dyj6gt4964deb.cloudfront.net/images/1d1ddb83-065b-4f1d-8e0c-fffc8f2f9fbe.jpeg" alt="Logo" class="w-10 h-10 rounded-full border-2 border-lavender object-cover">
+          <div>
+            <h4 class="font-serif font-black text-plum text-base">Costa in Beach Bar</h4>
+            <span class="text-xs text-olive font-bold">Apoio 19 · Costa da Caparica</span>
+          </div>
+        </div>
+        <p class="text-xs text-olive/80 leading-relaxed">
+          Com mais de 10 anos de praia, culinária autêntica, petiscos frescos e momentos inesquecíveis à beira-mar.
+        </p>
+      </div>
+
+      <!-- Wi-Fi Grátis da Mesa -->
+      <div class="bg-mint/60 border border-lavender/30 p-4 rounded-2xl">
+        <h5 class="text-xs font-black text-plum uppercase tracking-wider mb-1 flex items-center gap-1.5">
+          <span>📶</span> Wi-Fi Grátis da Esplanada
+        </h5>
+        <p class="text-xs text-olive mb-2.5">Internet de alta velocidade para a sua mesa:</p>
+        <div class="flex items-center justify-between bg-white p-2 rounded-xl border border-slate-200">
+          <div>
+            <span class="text-[10px] text-slate-400 block font-bold">Senha / Password:</span>
+            <span class="font-mono font-bold text-plum text-sm" id="wifiPassCode">costain09</span>
+          </div>
+          <button onclick="copiarSenhaWifi()" class="bg-lavender text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-lavender-dark transition-colors shadow-sm">
+            Copiar
+          </button>
+        </div>
+        <span class="text-[11px] text-emerald-600 font-bold mt-1 block hidden" id="wifiCopiedMsg">✓ Senha copiada!</span>
+      </div>
+
+      <!-- Localização & Horário -->
+      <div class="text-xs text-olive space-y-2">
+        <h5 class="font-bold text-plum text-sm flex items-center gap-1.5">
+          <span>📍</span> Muralha da Praia / Apoio 19
+        </h5>
+        <p>Av. Gen. Humberto Delgado Frente, Costa da Caparica, Portugal</p>
+        <p class="pt-1 text-slate-400">🕒 Seg - Dom: 10:00 às 22:30</p>
+      </div>
+
+    </div>
+
+    <div class="max-w-5xl mx-auto pt-6 mt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-2">
+      <p>© 2026 Costa in Beach Bar. Todos os direitos reservados.</p>
+      <p class="text-olive font-medium">🌊 Pé na areia, sabor autêntico e bons momentos</p>
     </div>
   </footer>
 
   <!-- =========================================================================
-       BOTÃO REDONDO FLUTUANTE DE CHAMAR O GARÇOM (Fundo Branco + Ícone Intuitivo + CALL)
+       8. BOTÃO REDONDO FLUTUANTE: CALL (Fundo Branco + Campainha + CALL em inglês)
        ========================================================================= -->
-  <div class="floating-call-container" id="floatingCallContainer">
+  <div class="floating-call-container" id="floatingCallContainer" style="bottom: 96px; right: 20px;">
     <button class="btn-round-call" id="btnOpenCallModal" onclick="abrirModalChamada()" aria-label="Call Waiter - Chamar Atendimento">
       <div class="bell-wave"></div>
       <div class="call-icon">
@@ -168,14 +369,13 @@
   <!-- MODAL DE CHAMADA À MESA -->
   <div class="modal-overlay" id="modalCallTable">
     <div class="modal-dialog">
-      <button class="modal-close-btn" id="btnCloseCallModal">&times;</button>
+      <button class="modal-close-btn" onclick="fecharModalChamada()">&times;</button>
       
       <div class="modal-header-icon">🛎️</div>
       <h3 class="modal-title" id="callModalTitle">Chamar Funcionário à Mesa</h3>
-      <p class="modal-subtitle" id="callModalSubtitle">A equipa no balcão receberá o alerta sonoro de imediato.</p>
+      <p class="modal-subtitle" id="callModalSubtitle">A equipa no balcão receberá o alerta sonoro e visual de imediato.</p>
 
       <form id="formCallWaiter">
-        <!-- Mesa pré-selecionada automaticamente -->
         <input type="hidden" id="selectedTableNumber" value="15" required>
         <div class="table-selected-badge-box">
           <span class="badge-table-large" id="tableSelectedDisplay">Mesa 15</span>
@@ -192,7 +392,7 @@
         </div>
 
         <button type="submit" class="btn btn-confirm-call" id="btnConfirmCall">
-          🛎️ Chamar Garçom Agora
+          🛎️ Chamar Garçom Agora (Ativar Alerta)
         </button>
       </form>
 
@@ -201,11 +401,12 @@
         <span class="success-checkmark">✅</span>
         <h4>Chamada Enviada!</h4>
         <p id="callSuccessMsg">O alerta já está a tocar no balcão. O empregado de mesa já se dirige até si.</p>
-        <button class="btn btn-close-success" onclick="fecharModalChamada()">Entendido</button>
+        <button type="button" class="btn btn-close-success" onclick="fecharModalChamada()">Entendido</button>
       </div>
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <!-- Script Especializado do Auto-atendimento da Mesa -->
+  <script src="mesa.js"></script>
 </body>
 </html>

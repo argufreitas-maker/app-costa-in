@@ -19,22 +19,26 @@ let abaAtiva = 'mesas'; // 'mesas' ou 'reservas'
 function mudarAbaAdmin(aba) {
   abaAtiva = aba;
 
-  // Botões
   const btnMesas = document.getElementById("tabBtnMesas");
   const btnReservas = document.getElementById("tabBtnReservas");
+  const btnPedidos = document.getElementById("tabBtnPedidos");
   const contentMesas = document.getElementById("tabContentMesas");
   const contentReservas = document.getElementById("tabContentReservas");
+  const contentPedidos = document.getElementById("tabContentPedidos");
+
+  [btnMesas, btnReservas, btnPedidos].forEach(b => { if (b) b.classList.remove("active"); });
+  [contentMesas, contentReservas, contentPedidos].forEach(c => { if (c) c.classList.remove("active"); });
 
   if (aba === 'mesas') {
     if (btnMesas) btnMesas.classList.add("active");
-    if (btnReservas) btnReservas.classList.remove("active");
     if (contentMesas) contentMesas.classList.add("active");
-    if (contentReservas) contentReservas.classList.remove("active");
+  } else if (aba === 'pedidos') {
+    if (btnPedidos) btnPedidos.classList.add("active");
+    if (contentPedidos) contentPedidos.classList.add("active");
+    renderizarPedidos();
   } else {
     if (btnReservas) btnReservas.classList.add("active");
-    if (btnMesas) btnMesas.classList.remove("active");
     if (contentReservas) contentReservas.classList.add("active");
-    if (contentMesas) contentMesas.classList.remove("active");
   }
 }
 
@@ -522,6 +526,10 @@ if (syncChannel) {
       tocarAlertaSonoro();
       renderizarChamadas();
       if (payload) exibirToastAlerta(payload);
+    } else if (type === 'NOVO_PEDIDO_MESA') {
+      tocarAlertaSonoro();
+      renderizarPedidos();
+      if (payload) exibirToastPedido(payload);
     } else if (type === 'NOVA_RESERVA') {
       tocarAlertaSonoro();
       renderizarReservas();
@@ -535,10 +543,147 @@ window.addEventListener('storage', (e) => {
     tocarAlertaSonoro();
     renderizarChamadas();
   }
+  if (e.key === 'costa_in_pedidos') {
+    renderizarPedidos();
+  }
   if (e.key === 'costa_in_reservas') {
     renderizarReservas();
   }
 });
+
+function exibirToastPedido(pedido) {
+  let toastContainer = document.getElementById("adminToastContainer");
+  if (!toastContainer) {
+    toastContainer = document.createElement("div");
+    toastContainer.id = "adminToastContainer";
+    toastContainer.style.cssText = "position: fixed; top: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 12px; max-width: 400px; width: calc(100% - 40px);";
+    document.body.appendChild(toastContainer);
+  }
+
+  const toast = document.createElement("div");
+  toast.style.cssText = "background: #957fef; color: #ffffff; padding: 16px 20px; border-radius: 16px; box-shadow: 0 12px 30px rgba(149, 127, 239, 0.45); border: 2px solid #ffffff; display: flex; align-items: center; justify-content: space-between; gap: 14px; animation: slideInDown 0.4s ease;";
+  toast.innerHTML = `
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="font-size: 1.8rem;">🍽️</span>
+      <div>
+        <strong style="font-size: 1.05rem; display: block;">NOVO PEDIDO: MESA ${pedido.mesa}!</strong>
+        <span style="font-size: 0.82rem; opacity: 0.95;">${pedido.totalItens} itens • Total: ${pedido.valorTotalFormatado}</span>
+      </div>
+    </div>
+    <button style="background: #ffffff; color: #513b56; border: none; padding: 8px 14px; border-radius: 999px; font-weight: 800; cursor: pointer; font-size: 0.8rem; white-space: nowrap;">Ver Comanda</button>
+  `;
+
+  toast.querySelector("button").onclick = () => {
+    mudarAbaAdmin('pedidos');
+    toast.remove();
+  };
+
+  toastContainer.appendChild(toast);
+
+  setTimeout(() => {
+    if (toast.parentNode) {
+      toast.style.opacity = '0';
+      toast.style.transition = 'opacity 0.5s ease';
+      setTimeout(() => toast.remove(), 500);
+    }
+  }, 14000);
+}
+
+// Gestão de Comandas & Pedidos das Mesas
+function obterPedidos() {
+  return JSON.parse(localStorage.getItem('costa_in_pedidos') || '[]');
+}
+
+function salvarPedidos(pedidos) {
+  localStorage.setItem('costa_in_pedidos', JSON.stringify(pedidos));
+}
+
+function renderizarPedidos() {
+  const container = document.getElementById("ordersFeedContainer");
+  const badge = document.getElementById("badgeTabPedidos");
+  const pedidos = obterPedidos();
+  const pendentes = pedidos.filter(p => p.status === 'pendente');
+
+  if (badge) badge.textContent = pendentes.length;
+  if (!container) return;
+
+  if (pedidos.length === 0) {
+    container.innerHTML = `
+      <div class="no-calls-box">
+        <span class="no-calls-icon">🍽️</span>
+        <h3>Nenhum pedido de mesa no momento</h3>
+        <p>Quando os clientes na mesa 15 (ou qualquer mesa) escolherem itens e confirmarem o carrinho na ementa digital, a comanda completa surgirá aqui com aviso sonoro!</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = "";
+  pedidos.forEach(pedido => {
+    const isPendente = pedido.status === 'pendente';
+    const card = document.createElement("div");
+    card.className = `order-comanda-card ${isPendente ? 'order-pending' : 'order-delivered'}`;
+
+    let itensListHtml = pedido.itens.map(it => `
+      <li style="display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed rgba(81,59,86,0.1); font-size: 0.86rem;">
+        <span><strong>${it.qtd}x</strong> ${it.nome}</span>
+        <span style="font-weight: 700; color: var(--color-lavender);">${(it.precoNum * it.qtd).toFixed(2)}€</span>
+      </li>
+    `).join("");
+
+    card.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 2px solid rgba(81,59,86,0.08); padding-bottom: 8px;">
+        <div>
+          <span style="background: var(--color-lavender); color: #fff; font-weight: 900; font-size: 0.8rem; padding: 4px 12px; border-radius: 999px;">MESA ${pedido.mesa}</span>
+          <span style="font-size: 0.78rem; color: var(--color-olive); margin-left: 8px;">🕒 ${pedido.hora}</span>
+        </div>
+        <span style="font-size: 0.76rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; ${isPendente ? 'background: #fef3c7; color: #b45309;' : 'background: #d1fae5; color: #065f46;'}">
+          ${isPendente ? '⏳ Em Preparação' : '✅ Entregue'}
+        </span>
+      </div>
+
+      <ul style="list-style: none; padding: 0; margin: 0 0 12px 0;">
+        ${itensListHtml}
+      </ul>
+
+      ${pedido.obs ? `<div style="background: #fffbeb; padding: 8px 12px; border-radius: 8px; font-size: 0.78rem; color: #b45309; margin-bottom: 12px; border-left: 3px solid #f59e0b;"><strong>Obs:</strong> "${pedido.obs}"</div>` : ''}
+
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 2px solid rgba(81,59,86,0.08); padding-top: 10px; margin-top: auto;">
+        <div>
+          <span style="font-size: 0.75rem; color: var(--color-olive); display: block;">Total da Mesa</span>
+          <strong style="font-size: 1.25rem; color: var(--color-plum); font-family: var(--font-serif);">${pedido.valorTotalFormatado}</strong>
+        </div>
+        <div>
+          ${isPendente ? `
+            <button onclick="marcarPedidoEntregue('${pedido.id}')" style="background: #10b981; color: #fff; border: none; padding: 8px 16px; border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 0.82rem; shadow: 0 2px 8px rgba(16,185,129,0.3);">
+              ✓ Entregar à Mesa
+            </button>
+          ` : `
+            <span style="color: #10b981; font-weight: 800; font-size: 0.82rem;">Entregue à Mesa</span>
+          `}
+        </div>
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+function marcarPedidoEntregue(pedidoId) {
+  const pedidos = obterPedidos();
+  const idx = pedidos.findIndex(p => p.id === pedidoId);
+  if (idx !== -1) {
+    pedidos[idx].status = 'entregue';
+    salvarPedidos(pedidos);
+    renderizarPedidos();
+  }
+}
+
+function limparTodosPedidos() {
+  const pedidos = obterPedidos().filter(p => p.status === 'pendente');
+  salvarPedidos(pedidos);
+  renderizarPedidos();
+}
 
 // 3. Nuvem em Tempo Real (Cross-Device: iPhone 15 -> Computador / Tablet)
 try {
@@ -557,6 +702,16 @@ try {
             tocarAlertaSonoro();
             renderizarChamadas();
             exibirToastAlerta(chamada);
+          }
+        } else if (payloadData && payloadData.type === 'NOVO_PEDIDO_MESA') {
+          const pedido = payloadData.payload;
+          const pedidos = obterPedidos();
+          if (!pedidos.some(p => p.id === pedido.id)) {
+            pedidos.unshift(pedido);
+            salvarPedidos(pedidos);
+            tocarAlertaSonoro();
+            renderizarPedidos();
+            exibirToastPedido(pedido);
           }
         } else if (payloadData && payloadData.type === 'NOVA_RESERVA') {
           const reserva = payloadData.payload;
